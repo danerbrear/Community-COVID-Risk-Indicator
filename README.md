@@ -32,6 +32,8 @@ Please refer to `docs/Private Kit Diagram.png` for a basic overview on the seque
 
 ## Developer Setup
 
+If you don't have react-native-cli set up yet, run `npm install –g react-native-cli`
+
 Refer to and run the dev_setup.sh for needed tools.
 
 ### iOS Configuration - First Time Setup
