@@ -32,13 +32,16 @@ Please refer to `docs/Private Kit Diagram.png` for a basic overview on the seque
 
 ## Developer Setup
 
+If you don't have react-native-cli set up yet, run `npm install –g react-native-cli`
+
 Refer to and run the dev_setup.sh for needed tools.
 
 ### iOS Configuration - First Time Setup
 
-1. Move to `ios` directory and run `pod install`
-2. If you have any trouble with packages not round, try `react-native link` from project directory.
-3. Look at running commands below.
+1. If you don't already have cocoapods, run `sudo gem install cocoapods`
+2. Move to `ios` directory and run `pod install`
+3. If you have any trouble with packages not round, try `react-native link` from project directory.
+4. Look at running commands below.
 
 ## Running
 
