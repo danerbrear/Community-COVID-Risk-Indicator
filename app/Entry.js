@@ -26,7 +26,7 @@ class Entry extends Component {
   componentDidMount() {
     GetStoreData('PARTICIPATE')
       .then(isParticipating => {
-        console.log(isParticipating);
+        console.log("Entry.js: Is participating: ", isParticipating);
         this.setState({
           initialRouteName: isParticipating,
         });
@@ -35,6 +35,7 @@ class Entry extends Component {
   }
 
   render() {
+    console.log("Rendering route: ", this.state.initialRouteName)
     return (
       <NavigationContainer>
         <SafeAreaView style={{ flex: 1 }}>

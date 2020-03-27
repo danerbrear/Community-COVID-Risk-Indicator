@@ -13,7 +13,7 @@ class Welcome extends Component {
   componentDidMount() {
     GetStoreData('PARTICIPATE')
       .then(isParticipating => {
-        console.log(isParticipating);
+        console.log("Welcome.js: ", isParticipating);
         if (isParticipating == 'true') {
           this.props.navigation.navigate('LocationTrackingScreen', {});
         }

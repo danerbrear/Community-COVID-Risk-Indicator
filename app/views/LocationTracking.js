@@ -44,7 +44,7 @@ class LocationTracking extends Component {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     GetStoreData('PARTICIPATE')
       .then(isParticipating => {
-        console.log(isParticipating);
+        console.log("LocationTracking.js: Is participating: ", isParticipating);
 
         if (isParticipating === 'true') {
           this.setState({
