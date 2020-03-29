@@ -575,13 +575,21 @@
 					"$(PROJECT_DIR)/GoogleMaps-3.8.0/Base/Frameworks",
 					"$(PROJECT_DIR)/GoogleMaps-3.8.0/Maps/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HAVE_GOOGLE_MAPS=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps/**",
+				);
 				INFOPLIST_FILE = PrivateKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-ObjC",
 					"-lc++",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.mit.privatekit;
 				PRODUCT_NAME = PrivateKit;
@@ -601,13 +609,21 @@
 					"$(PROJECT_DIR)/GoogleMaps-3.8.0/Base/Frameworks",
 					"$(PROJECT_DIR)/GoogleMaps-3.8.0/Maps/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HAVE_GOOGLE_MAPS=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/lib/ios/AirMaps/**",
+				);
 				INFOPLIST_FILE = PrivateKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-ObjC",
 					"-lc++",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = edu.mit.privatekit;
 				PRODUCT_NAME = PrivateKit;

@@ -29,6 +29,8 @@ import pkLogo from './../assets/images/PKLogo.png';
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import languages from './../locales/languages';
 
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+
 const width = Dimensions.get('window').width;
 
 class LocationTracking extends Component {
@@ -44,7 +46,7 @@ class LocationTracking extends Component {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
     GetStoreData('PARTICIPATE')
       .then(isParticipating => {
-        console.log("LocationTracking.js: Is participating: ", isParticipating);
+        console.log('LocationTracking.js: Is participating: ', isParticipating);
 
         if (isParticipating === 'true') {
           this.setState({
@@ -132,8 +134,18 @@ class LocationTracking extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={{ height: '35%', width: '100%' }}
+          initialRegion={{
+            latitude: 39,
+            longitude: -104,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+        {/*Modal just for licenses*/}
         <ScrollView contentContainerStyle={styles.main}>
-          {/* A modal menu. Currently only used for license info */}
           <Menu
             style={{
               position: 'absolute',
@@ -221,7 +233,11 @@ class LocationTracking extends Component {
                 <Text style={styles.sectionDescription}>
                   {languages.t('label.not_logging_message')}
                 </Text>
-                <Text style={{fontStyle: 'italic', paddingTop: 10, color: 'red'}}>Hey guys Dane here. This will be the app we will build off of!!</Text>
+                <Text
+                  style={{ fontStyle: 'italic', paddingTop: 10, color: 'red' }}>
+                  Hey guys Dane here. This will be the app we will build off
+                  of!!
+                </Text>
               </View>
             )}
           </View>

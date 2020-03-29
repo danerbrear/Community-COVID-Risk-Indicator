@@ -8,9 +8,9 @@ import PushNotification from 'react-native-push-notification';
 
 let instanceCount = 0;
 let lastPointCount = 0;
-let locationInterval = 60000 * 5; // Time (in milliseconds) between location information polls.  E.g. 60000*5 = 5 minutes
+// let locationInterval = 60000 * 5; // Time (in milliseconds) between location information polls.  E.g. 60000*5 = 5 minutes
 // DEBUG: Reduce Time intervall for faster debugging
-// var locationInterval = 5000;
+var locationInterval = 5000;
 
 function saveLocation(location) {
   // Persist this location data in our local storage of time/lat/lon values
@@ -61,6 +61,7 @@ function saveLocation(location) {
       time: unixtimeUTC,
     };
     curated.push(lat_lon_time);
+    console.log('Curated Location Data:', curated);
 
     SetStoreData('LOCATION_DATA', curated);
   });
@@ -92,7 +93,7 @@ export default class LocationServices {
       notificationTitle: 'Private Kit Enabled',
       notificationText:
         'Private Kit is securely storing your GPS coordinates once every five minutes on this device.',
-      debug: false, // when true, it beeps every time a loc is read
+      debug: true, // when true, it beeps every time a loc is read
       startOnBoot: true,
       stopOnTerminate: false,
       locationProvider: BackgroundGeolocation.DISTANCE_FILTER_PROVIDER,
