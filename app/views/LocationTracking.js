@@ -39,6 +39,7 @@ class LocationTracking extends Component {
 
     this.state = {
       isLogging: '',
+      initialRegion: {},
     };
   }
 
@@ -53,6 +54,7 @@ class LocationTracking extends Component {
             isLogging: true,
           });
           this.willParticipate();
+          this.getInitialState();
         } else {
           this.setState({
             isLogging: false,
@@ -117,6 +119,8 @@ class LocationTracking extends Component {
     SetStoreData('PARTICIPATE', 'true').then(() => {
       LocationServices.start();
       BroadcastingServices.start();
+      this.getInitialState();
+      console.log('Initial Region: ', this.state.initialRegion);
     });
     this.setState({
       isLogging: true,
@@ -131,18 +135,36 @@ class LocationTracking extends Component {
     });
   };
 
+  getInitialState = async () => {
+    try {
+      GetStoreData('LOCATION_DATA').then(locationArrayString => {
+        var locationArray = JSON.parse(locationArrayString);
+        if (locationArray === null) {
+          console.log(locationArray);
+        } else {
+          var lastCoords = locationArray[locationArray.length - 1];
+          this.setState({
+            initialRegion: {
+              latitude: lastCoords['latitude'],
+              longitude: lastCoords['longitude'],
+              latitudeDelta: 10.10922,
+              longitudeDelta: 10.20421,
+            },
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
           style={{ height: '35%', width: '100%' }}
-          initialRegion={{
-            latitude: 39,
-            longitude: -104,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          initialRegion={this.state.initialRegion}
         />
         {/*Modal just for licenses*/}
         <ScrollView contentContainerStyle={styles.main}>
@@ -178,15 +200,6 @@ class LocationTracking extends Component {
           <View style={styles.buttonsAndLogoView}>
             {this.state.isLogging ? (
               <>
-                <Image
-                  source={pkLogo}
-                  style={{
-                    width: 132,
-                    height: 164.4,
-                    alignSelf: 'center',
-                    marginTop: 12,
-                  }}
-                />
                 <TouchableOpacity
                   onPress={() => this.setOptOut()}
                   style={styles.stopLoggingButtonTouchable}>
@@ -204,16 +217,6 @@ class LocationTracking extends Component {
               </>
             ) : (
               <>
-                <Image
-                  source={pkLogo}
-                  style={{
-                    width: 132,
-                    height: 164.4,
-                    alignSelf: 'center',
-                    marginTop: 12,
-                    opacity: 0.3,
-                  }}
-                />
                 <TouchableOpacity
                   onPress={() => this.willParticipate()}
                   style={styles.startLoggingButtonTouchable}>
@@ -285,24 +288,6 @@ class LocationTracking extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-
-          <View style={styles.footer}>
-            <Text
-              style={[
-                styles.sectionDescription,
-                { textAlign: 'center', paddingTop: 15 },
-              ]}>
-              {languages.t('label.url_info')}{' '}
-            </Text>
-            <Text
-              style={[
-                styles.sectionDescription,
-                { color: 'blue', textAlign: 'center', marginTop: 0 },
-              ]}
-              onPress={() => Linking.openURL('https://privatekit.mit.edu')}>
-              {languages.t('label.private_kit_url')}
-            </Text>
-          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -349,14 +334,6 @@ const styles = StyleSheet.create({
     flex: 2,
     alignItems: 'center',
     marginBottom: -10,
-  },
-  footer: {
-    textAlign: 'center',
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingBottom: 10,
-    justifyContent: 'flex-end',
   },
   sectionDescription: {
     fontSize: 12,

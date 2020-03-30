@@ -61,7 +61,6 @@ function saveLocation(location) {
       time: unixtimeUTC,
     };
     curated.push(lat_lon_time);
-    console.log('Curated Location Data:', curated);
 
     SetStoreData('LOCATION_DATA', curated);
   });
