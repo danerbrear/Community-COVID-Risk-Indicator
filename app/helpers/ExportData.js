@@ -1,4 +1,4 @@
-import database, { firebase } from '@react-native-firebase/database';
+import database from '@react-native-firebase/database';
 import { GetStoreData, SetStoreData } from './General';
 
 const GEOCODE_API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
@@ -27,7 +27,7 @@ export async function ExportLocationData() {
           GEOCODE_API_KEY,
       )
         .then(response => response.json())
-        .then(responseJson => {
+        .then(async responseJson => {
           const locationDetails = responseJson.results[0];
 
           // Make sure this location isn't a neighborhood - we don't want to track people's homes
@@ -35,6 +35,9 @@ export async function ExportLocationData() {
             const placeID = locationDetails.placeID;
 
             // Update risk score in Firebase for this place ID
+            const ref = database().ref(`/${placeID}`);
+            const snapshot = await ref.once('value');
+            console.log('Snapshot: ', snapshot.val());
           }
 
           //End .then execution
