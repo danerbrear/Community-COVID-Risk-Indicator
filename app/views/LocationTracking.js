@@ -134,6 +134,10 @@ class LocationTracking extends Component {
     });
   };
 
+  /* Call this function when the survey deems the user is unhealthy and we can update risk
+  scores for their location history */
+  exportLocationData = () => {};
+
   setOptOut = () => {
     LocationServices.stop(this.props.navigation);
     BroadcastingServices.stop(this.props.navigation);
