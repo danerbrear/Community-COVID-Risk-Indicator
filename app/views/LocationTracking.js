@@ -265,9 +265,7 @@ class LocationTracking extends Component {
                 source={exportImage}
                 resizeMode={'contain'}
               />
-              <Text style={styles.actionButtonText}>
-                {languages.t('label.export')}
-              </Text>
+              <Text style={styles.actionButtonText}>Share</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -278,9 +276,7 @@ class LocationTracking extends Component {
                 source={news}
                 resizeMode={'contain'}
               />
-              <Text style={styles.actionButtonText}>
-                {languages.t('label.news')}
-              </Text>
+              <Text style={styles.actionButtonText}>New Entry</Text>
             </TouchableOpacity>
           </View>
         </View>
