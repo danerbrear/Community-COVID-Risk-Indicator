@@ -15,6 +15,8 @@
 #import <GoogleMaps/GoogleMaps.h>
 
 @import GoogleMaps;
+@import UIKit;
+@import Firebase;
 
 @implementation AppDelegate
 
@@ -36,6 +38,7 @@
   
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
+  [FIRApp configure];
   return YES;
 }
 

@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -213,6 +214,7 @@ dependencies {
     }
     implementation 'com.google.android.gms:play-services-base:10.0.1'
     implementation 'com.google.android.gms:play-services-maps:10.0.1'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
 }
 
  // Just to fix the app start crash error

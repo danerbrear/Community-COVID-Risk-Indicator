@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1055195516091",
+    "firebase_url": "https://covid-risk-indicator.firebaseio.com",
+    "project_id": "covid-risk-indicator",
+    "storage_bucket": "covid-risk-indicator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055195516091:android:aec171a226b678b8d9ed9e",
+        "android_client_info": {
+          "package_name": "com.risk_indicator.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055195516091-8dqrkrf8p5d695516vif217h1onm207c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055195516091-8dqrkrf8p5d695516vif217h1onm207c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1055195516091-0t6nskhk21etebh3sd1mn912kf84ioqu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "come.risk-indicator.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
