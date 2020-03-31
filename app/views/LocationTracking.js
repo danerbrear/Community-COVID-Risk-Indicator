@@ -39,7 +39,13 @@ class LocationTracking extends Component {
 
     this.state = {
       isLogging: '',
-      initialRegion: {},
+      // Default location is Apple HQ
+      initialRegion: {
+        latitude: 37.33182,
+        longitude: -122.03118,
+        latitudeDelta: 0.2,
+        longitudeDelta: 0.2,
+      },
     };
   }
 
@@ -97,6 +103,7 @@ class LocationTracking extends Component {
         this.setState({
           isLogging: true,
         });
+        this.getInitialState();
       } else if (authorization === BackgroundGeolocation.NOT_AUTHORIZED) {
         LocationServices.stop(this.props.navigation);
         BroadcastingServices.stop(this.props.navigation);
@@ -163,11 +170,11 @@ class LocationTracking extends Component {
       <SafeAreaView style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
-          style={{ height: '35%', width: '100%' }}
+          style={styles.mapView}
           initialRegion={this.state.initialRegion}
         />
         {/*Modal just for licenses*/}
-        <ScrollView contentContainerStyle={styles.main}>
+        <View style={styles.headerTitle}>
           <Menu
             style={{
               position: 'absolute',
@@ -196,8 +203,10 @@ class LocationTracking extends Component {
           <Text style={styles.headerTitle}>
             {languages.t('label.private_kit')}
           </Text>
+        </View>
 
-          <View style={styles.buttonsAndLogoView}>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.logButtonsView}>
             {this.state.isLogging ? (
               <>
                 <TouchableOpacity
@@ -209,7 +218,7 @@ class LocationTracking extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.overlap()}
-                  style={styles.startLoggingButtonTouchable}>
+                  style={styles.checkOverlapButtonTouchable}>
                   <Text style={styles.startLoggingButtonText}>
                     {languages.t('label.overlap')}
                   </Text>
@@ -226,25 +235,9 @@ class LocationTracking extends Component {
                 </TouchableOpacity>
               </>
             )}
-
-            {this.state.isLogging ? (
-              <Text style={styles.sectionDescription}>
-                {languages.t('label.logging_message')}
-              </Text>
-            ) : (
-              <View>
-                <Text style={styles.sectionDescription}>
-                  {languages.t('label.not_logging_message')}
-                </Text>
-                <Text
-                  style={{ fontStyle: 'italic', paddingTop: 10, color: 'red' }}>
-                  Hey guys Dane here. This will be the app we will build off
-                  of!!
-                </Text>
-              </View>
-            )}
           </View>
 
+          {/* Action buttons */}
           <View style={styles.actionButtonsView}>
             <TouchableOpacity
               onPress={() => this.import()}
@@ -288,7 +281,7 @@ class LocationTracking extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-        </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
@@ -298,17 +291,19 @@ const styles = StyleSheet.create({
   // Container covers the entire screen
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: colors.PRIMARY_TEXT,
-    backgroundColor: colors.WHITE,
+  },
+  mapView: {
+    flex: 1,
   },
   headerTitle: {
+    flexDirection: 'row',
     textAlign: 'center',
     fontSize: 38,
     padding: 0,
     fontFamily: 'OpenSans-Bold',
+    position: 'absolute',
+    top: 0,
+    zIndex: 2,
   },
   subHeaderTitle: {
     textAlign: 'center',
@@ -316,39 +311,44 @@ const styles = StyleSheet.create({
     fontSize: 22,
     padding: 5,
   },
-  main: {
-    flex: 1,
+  buttonsContainer: {
+    position: 'absolute',
+    flex: 3,
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '80%',
+    bottom: 0,
+    height: '25%',
+    width: '100%',
   },
-  buttonsAndLogoView: {
-    flex: 6,
-    justifyContent: 'space-around',
+  logButtonsView: {
+    flex: 2,
+    flexDirection: 'column',
   },
   actionButtonsView: {
-    width: width * 0.7866,
+    width: '100%',
+    paddingHorizontal: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 2,
     alignItems: 'center',
-    marginBottom: -10,
+    zIndex: 2,
   },
-  sectionDescription: {
-    fontSize: 12,
-    lineHeight: 24,
-    fontFamily: 'OpenSans-Regular',
-    marginLeft: 10,
-    marginRight: 10,
+  checkOverlapButtonTouchable: {
+    borderRadius: 12,
+    backgroundColor: '#665eff',
+    alignSelf: 'center',
+    width: width * 0.7866,
+    flex: 1,
+    justifyContent: 'center',
+    zIndex: 2,
   },
   startLoggingButtonTouchable: {
     borderRadius: 12,
     backgroundColor: '#665eff',
-    height: 52,
     alignSelf: 'center',
     width: width * 0.7866,
+    flex: 0.5,
     justifyContent: 'center',
+    zIndex: 2,
   },
   startLoggingButtonText: {
     fontFamily: 'OpenSans-Bold',
@@ -365,6 +365,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width * 0.7866,
     justifyContent: 'center',
+    flex: 1,
+    marginBottom: 10,
   },
   stopLoggingButtonText: {
     fontFamily: 'OpenSans-Bold',
