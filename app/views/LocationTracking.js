@@ -174,14 +174,19 @@ class LocationTracking extends Component {
           initialRegion={this.state.initialRegion}
         />
         {/*Modal just for licenses*/}
-        <View style={styles.headerTitle}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>
+            {languages.t('label.private_kit')}
+          </Text>
           <Menu
             style={{
-              position: 'absolute',
-              alignSelf: 'flex-end',
-              zIndex: 10,
+              alignSelf: 'center',
+              paddingTop: 8,
+              zIndex: 2,
+              flex: 1,
+              alignContent: 'center',
             }}>
-            <MenuTrigger style={{ marginTop: 14 }}>
+            <MenuTrigger style={{ justifyContent: 'center' }}>
               <Image
                 source={kebabIcon}
                 style={{
@@ -200,9 +205,6 @@ class LocationTracking extends Component {
               </MenuOption>
             </MenuOptions>
           </Menu>
-          <Text style={styles.headerTitle}>
-            {languages.t('label.private_kit')}
-          </Text>
         </View>
 
         <View style={styles.buttonsContainer}>
@@ -295,15 +297,19 @@ const styles = StyleSheet.create({
   mapView: {
     flex: 1,
   },
-  headerTitle: {
+  headerContainer: {
     flexDirection: 'row',
+    top: 0,
+    zIndex: 2,
+    position: 'absolute',
+  },
+  headerTitle: {
+    flex: 7,
     textAlign: 'center',
     fontSize: 38,
     padding: 0,
     fontFamily: 'OpenSans-Bold',
-    position: 'absolute',
-    top: 0,
-    zIndex: 2,
+    justifyContent: 'flex-start',
   },
   subHeaderTitle: {
     textAlign: 'center',
@@ -315,7 +321,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flex: 3,
     flexDirection: 'column',
-    bottom: 0,
+    bottom: 30,
     height: '25%',
     width: '100%',
   },
