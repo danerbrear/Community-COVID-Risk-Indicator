@@ -17,7 +17,7 @@ export async function ExportLocationData() {
     console.log('Exporting location history: ', locationData);
 
     // Max 20 requests right now to prevent spending money on too many unwanted requests
-    fetchLoop: for (let i = 0; i < Math.min(20, locationData.length); i++) {
+    for (let i = 0; i < Math.min(20, locationData.length); i++) {
       fetch(
         'https://maps.googleapis.com/maps/api/geocode/json?address=' +
           locationData[i].latitude +
@@ -32,12 +32,18 @@ export async function ExportLocationData() {
 
           // Make sure this location isn't a neighborhood - we don't want to track people's homes
           if (locationDetails.types.indexOf('neighborhood') === -1) {
-            const placeID = locationDetails.placeID;
+            const placeID = locationDetails.place_id;
 
             // Update risk score in Firebase for this place ID
             const ref = database().ref(`/${placeID}`);
             const snapshot = await ref.once('value');
-            console.log('Snapshot: ', snapshot.val());
+
+            // Increment that places count of infected people
+            if (snapshot.val() === null) {
+              await ref.set({ count: 1 });
+            } else {
+              await ref.set({ count: snapshot.val().count + 1 });
+            }
           }
 
           //End .then execution
