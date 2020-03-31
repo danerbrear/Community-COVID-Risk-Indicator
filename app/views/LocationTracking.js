@@ -27,9 +27,11 @@ import kebabIcon from './../assets/images/kebabIcon.png';
 import pkLogo from './../assets/images/PKLogo.png';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
+import { ExportLocationData } from '../helpers/ExportData';
 import languages from './../locales/languages';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { min } from 'moment';
 
 const width = Dimensions.get('window').width;
 
@@ -39,6 +41,13 @@ class LocationTracking extends Component {
 
     this.state = {
       isLogging: '',
+      // Default location is Apple HQ
+      initialRegion: {
+        latitude: 37.33182,
+        longitude: -122.03118,
+        latitudeDelta: 0.2,
+        longitudeDelta: 0.2,
+      },
     };
   }
 
@@ -53,6 +62,7 @@ class LocationTracking extends Component {
             isLogging: true,
           });
           this.willParticipate();
+          this.getInitialState();
         } else {
           this.setState({
             isLogging: false,
@@ -95,6 +105,7 @@ class LocationTracking extends Component {
         this.setState({
           isLogging: true,
         });
+        this.getInitialState();
       } else if (authorization === BackgroundGeolocation.NOT_AUTHORIZED) {
         LocationServices.stop(this.props.navigation);
         BroadcastingServices.stop(this.props.navigation);
@@ -117,6 +128,8 @@ class LocationTracking extends Component {
     SetStoreData('PARTICIPATE', 'true').then(() => {
       LocationServices.start();
       BroadcastingServices.start();
+      this.getInitialState();
+      console.log('Initial Region: ', this.state.initialRegion);
     });
     this.setState({
       isLogging: true,
@@ -131,28 +144,51 @@ class LocationTracking extends Component {
     });
   };
 
+  getInitialState = async () => {
+    try {
+      GetStoreData('LOCATION_DATA').then(locationArrayString => {
+        var locationArray = JSON.parse(locationArrayString);
+        if (locationArray === null) {
+          console.log(locationArray);
+        } else {
+          var lastCoords = locationArray[locationArray.length - 1];
+          this.setState({
+            initialRegion: {
+              latitude: lastCoords['latitude'],
+              longitude: lastCoords['longitude'],
+              latitudeDelta: 10.10922,
+              longitudeDelta: 10.20421,
+            },
+          });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
-          style={{ height: '35%', width: '100%' }}
-          initialRegion={{
-            latitude: 39,
-            longitude: -104,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          style={styles.mapView}
+          initialRegion={this.state.initialRegion}
         />
         {/*Modal just for licenses*/}
-        <ScrollView contentContainerStyle={styles.main}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>
+            {languages.t('label.private_kit')}
+          </Text>
           <Menu
             style={{
-              position: 'absolute',
-              alignSelf: 'flex-end',
-              zIndex: 10,
+              alignSelf: 'center',
+              paddingTop: 8,
+              zIndex: 2,
+              flex: 1,
+              alignContent: 'center',
             }}>
-            <MenuTrigger style={{ marginTop: 14 }}>
+            <MenuTrigger style={{ justifyContent: 'center' }}>
               <Image
                 source={kebabIcon}
                 style={{
@@ -171,22 +207,12 @@ class LocationTracking extends Component {
               </MenuOption>
             </MenuOptions>
           </Menu>
-          <Text style={styles.headerTitle}>
-            {languages.t('label.private_kit')}
-          </Text>
+        </View>
 
-          <View style={styles.buttonsAndLogoView}>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.logButtonsView}>
             {this.state.isLogging ? (
               <>
-                <Image
-                  source={pkLogo}
-                  style={{
-                    width: 132,
-                    height: 164.4,
-                    alignSelf: 'center',
-                    marginTop: 12,
-                  }}
-                />
                 <TouchableOpacity
                   onPress={() => this.setOptOut()}
                   style={styles.stopLoggingButtonTouchable}>
@@ -196,7 +222,7 @@ class LocationTracking extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => this.overlap()}
-                  style={styles.startLoggingButtonTouchable}>
+                  style={styles.checkOverlapButtonTouchable}>
                   <Text style={styles.startLoggingButtonText}>
                     {languages.t('label.overlap')}
                   </Text>
@@ -204,16 +230,6 @@ class LocationTracking extends Component {
               </>
             ) : (
               <>
-                <Image
-                  source={pkLogo}
-                  style={{
-                    width: 132,
-                    height: 164.4,
-                    alignSelf: 'center',
-                    marginTop: 12,
-                    opacity: 0.3,
-                  }}
-                />
                 <TouchableOpacity
                   onPress={() => this.willParticipate()}
                   style={styles.startLoggingButtonTouchable}>
@@ -223,25 +239,9 @@ class LocationTracking extends Component {
                 </TouchableOpacity>
               </>
             )}
-
-            {this.state.isLogging ? (
-              <Text style={styles.sectionDescription}>
-                {languages.t('label.logging_message')}
-              </Text>
-            ) : (
-              <View>
-                <Text style={styles.sectionDescription}>
-                  {languages.t('label.not_logging_message')}
-                </Text>
-                <Text
-                  style={{ fontStyle: 'italic', paddingTop: 10, color: 'red' }}>
-                  Hey guys Dane here. This will be the app we will build off
-                  of!!
-                </Text>
-              </View>
-            )}
           </View>
 
+          {/* Action buttons */}
           <View style={styles.actionButtonsView}>
             <TouchableOpacity
               onPress={() => this.import()}
@@ -257,7 +257,7 @@ class LocationTracking extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => this.export()}
+              onPress={() => ExportLocationData()}
               style={styles.actionButtonsTouchable}>
               <Image
                 style={[
@@ -267,9 +267,7 @@ class LocationTracking extends Component {
                 source={exportImage}
                 resizeMode={'contain'}
               />
-              <Text style={styles.actionButtonText}>
-                {languages.t('label.export')}
-              </Text>
+              <Text style={styles.actionButtonText}>Share</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -280,30 +278,10 @@ class LocationTracking extends Component {
                 source={news}
                 resizeMode={'contain'}
               />
-              <Text style={styles.actionButtonText}>
-                {languages.t('label.news')}
-              </Text>
+              <Text style={styles.actionButtonText}>New Entry</Text>
             </TouchableOpacity>
           </View>
-
-          <View style={styles.footer}>
-            <Text
-              style={[
-                styles.sectionDescription,
-                { textAlign: 'center', paddingTop: 15 },
-              ]}>
-              {languages.t('label.url_info')}{' '}
-            </Text>
-            <Text
-              style={[
-                styles.sectionDescription,
-                { color: 'blue', textAlign: 'center', marginTop: 0 },
-              ]}
-              onPress={() => Linking.openURL('https://privatekit.mit.edu')}>
-              {languages.t('label.private_kit_url')}
-            </Text>
-          </View>
-        </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
@@ -313,17 +291,23 @@ const styles = StyleSheet.create({
   // Container covers the entire screen
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: colors.PRIMARY_TEXT,
-    backgroundColor: colors.WHITE,
+  },
+  mapView: {
+    flex: 1,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    top: 0,
+    zIndex: 2,
+    position: 'absolute',
   },
   headerTitle: {
+    flex: 7,
     textAlign: 'center',
     fontSize: 38,
     padding: 0,
     fontFamily: 'OpenSans-Bold',
+    justifyContent: 'flex-start',
   },
   subHeaderTitle: {
     textAlign: 'center',
@@ -331,47 +315,44 @@ const styles = StyleSheet.create({
     fontSize: 22,
     padding: 5,
   },
-  main: {
-    flex: 1,
+  buttonsContainer: {
+    position: 'absolute',
+    flex: 3,
     flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '80%',
+    bottom: 30,
+    height: '25%',
+    width: '100%',
   },
-  buttonsAndLogoView: {
-    flex: 6,
-    justifyContent: 'space-around',
+  logButtonsView: {
+    flex: 2,
+    flexDirection: 'column',
   },
   actionButtonsView: {
-    width: width * 0.7866,
+    width: '100%',
+    paddingHorizontal: 30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 2,
     alignItems: 'center',
-    marginBottom: -10,
+    zIndex: 2,
   },
-  footer: {
-    textAlign: 'center',
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingBottom: 10,
-    justifyContent: 'flex-end',
-  },
-  sectionDescription: {
-    fontSize: 12,
-    lineHeight: 24,
-    fontFamily: 'OpenSans-Regular',
-    marginLeft: 10,
-    marginRight: 10,
+  checkOverlapButtonTouchable: {
+    borderRadius: 12,
+    backgroundColor: '#665eff',
+    alignSelf: 'center',
+    width: width * 0.7866,
+    flex: 1,
+    justifyContent: 'center',
+    zIndex: 2,
   },
   startLoggingButtonTouchable: {
     borderRadius: 12,
     backgroundColor: '#665eff',
-    height: 52,
     alignSelf: 'center',
     width: width * 0.7866,
+    flex: 0.5,
     justifyContent: 'center',
+    zIndex: 2,
   },
   startLoggingButtonText: {
     fontFamily: 'OpenSans-Bold',
@@ -388,6 +369,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: width * 0.7866,
     justifyContent: 'center',
+    flex: 1,
+    marginBottom: 10,
   },
   stopLoggingButtonText: {
     fontFamily: 'OpenSans-Bold',

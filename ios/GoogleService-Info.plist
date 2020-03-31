@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1055195516091-0t6nskhk21etebh3sd1mn912kf84ioqu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1055195516091-0t6nskhk21etebh3sd1mn912kf84ioqu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBmc2yy-nJ345YszZDKNR0W19GQFxdQo-A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1055195516091</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>come.risk-indicator.app</string>
+	<key>PROJECT_ID</key>
+	<string>covid-risk-indicator</string>
+	<key>STORAGE_BUCKET</key>
+	<string>covid-risk-indicator.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1055195516091:ios:ef4ac4ba28b5e1ebd9ed9e</string>
+	<key>DATABASE_URL</key>
+	<string>https://covid-risk-indicator.firebaseio.com</string>
+</dict>
+</plist>
