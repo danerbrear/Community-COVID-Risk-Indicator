@@ -12,6 +12,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 import Entry from './app/Entry';
 
 const App: () => React$Node = () => {
+  console.disableYellowBox = true;
   return (
     <MenuProvider>
       <Entry />

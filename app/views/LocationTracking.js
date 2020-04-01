@@ -31,9 +31,10 @@ import { ExportLocationData } from '../helpers/ExportData';
 import languages from './../locales/languages';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { min } from 'moment';
+import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width;
+const DELTA = 0.03;
 
 class LocationTracking extends Component {
   constructor(props) {
@@ -42,11 +43,11 @@ class LocationTracking extends Component {
     this.state = {
       isLogging: '',
       // Default location is Apple HQ
-      initialRegion: {
+      location: {
         latitude: 37.33182,
         longitude: -122.03118,
-        latitudeDelta: 0.2,
-        longitudeDelta: 0.2,
+        latitudeDelta: DELTA,
+        longitudeDelta: DELTA,
       },
     };
   }
@@ -62,7 +63,6 @@ class LocationTracking extends Component {
             isLogging: true,
           });
           this.willParticipate();
-          this.getInitialState();
         } else {
           this.setState({
             isLogging: false,
@@ -70,10 +70,23 @@ class LocationTracking extends Component {
         }
       })
       .catch(error => console.log(error));
+    this.findCoordinates();
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
+
+  findCoordinates = () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        position.coords.latitudeDelta = DELTA;
+        position.coords.longitudeDelta = DELTA;
+        this.setState({ location: position.coords });
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  };
 
   handleBackPress = () => {
     BackHandler.exitApp(); // works best when the goBack is async
@@ -105,7 +118,6 @@ class LocationTracking extends Component {
         this.setState({
           isLogging: true,
         });
-        this.getInitialState();
       } else if (authorization === BackgroundGeolocation.NOT_AUTHORIZED) {
         LocationServices.stop(this.props.navigation);
         BroadcastingServices.stop(this.props.navigation);
@@ -128,7 +140,6 @@ class LocationTracking extends Component {
     SetStoreData('PARTICIPATE', 'true').then(() => {
       LocationServices.start();
       BroadcastingServices.start();
-      this.getInitialState();
       console.log('Initial Region: ', this.state.initialRegion);
     });
     this.setState({
@@ -144,36 +155,13 @@ class LocationTracking extends Component {
     });
   };
 
-  getInitialState = async () => {
-    try {
-      GetStoreData('LOCATION_DATA').then(locationArrayString => {
-        var locationArray = JSON.parse(locationArrayString);
-        if (locationArray === null) {
-          console.log(locationArray);
-        } else {
-          var lastCoords = locationArray[locationArray.length - 1];
-          this.setState({
-            initialRegion: {
-              latitude: lastCoords['latitude'],
-              longitude: lastCoords['longitude'],
-              latitudeDelta: 10.10922,
-              longitudeDelta: 10.20421,
-            },
-          });
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   render() {
     return (
       <SafeAreaView style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
           style={styles.mapView}
-          initialRegion={this.state.initialRegion}
+          region={this.state.location}
         />
         {/*Modal just for licenses*/}
         <View style={styles.headerContainer}>
