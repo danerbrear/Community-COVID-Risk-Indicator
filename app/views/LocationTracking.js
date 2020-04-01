@@ -27,7 +27,7 @@ import kebabIcon from './../assets/images/kebabIcon.png';
 import pkLogo from './../assets/images/PKLogo.png';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
-import { ExportLocationData } from '../helpers/ExportData';
+import { ExportLocationData, NearbyPlacesRequest } from '../helpers/ExportData';
 import languages from './../locales/languages';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -82,6 +82,10 @@ class LocationTracking extends Component {
         position.coords.latitudeDelta = DELTA;
         position.coords.longitudeDelta = DELTA;
         this.setState({ location: position.coords });
+        NearbyPlacesRequest({
+          latitude: this.state.location.latitude,
+          longitude: this.state.location.longitude,
+        });
       },
       error => Alert.alert(error.message),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },

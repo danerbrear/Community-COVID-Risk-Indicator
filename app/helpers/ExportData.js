@@ -1,7 +1,7 @@
 import database from '@react-native-firebase/database';
 import { GetStoreData, SetStoreData } from './General';
 
-const GEOCODE_API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
+const API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
 
 /* Call this function when the survey deems the user is unhealthy and we can update risk
 scores for their location history */
@@ -24,7 +24,7 @@ export async function ExportLocationData() {
           ',' +
           locationData[i].longitude +
           '&key=' +
-          GEOCODE_API_KEY,
+          API_KEY,
       )
         .then(response => response.json())
         .then(async responseJson => {
@@ -52,4 +52,47 @@ export async function ExportLocationData() {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function NearbyPlacesRequest(location = null) {
+  if (location === null) {
+    return;
+  }
+
+  const request = {
+    key: API_KEY,
+    location: location,
+    radius: '20',
+    types: [
+      'restaurant',
+      'airport',
+      'amusement_park',
+      'aquarium',
+      'art_gallery',
+      'bank',
+      'bakery',
+      'bar',
+    ],
+  };
+
+  fetch(
+    'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
+      location.latitude +
+      ',' +
+      location.longitude +
+      '&radius=' +
+      request.radius +
+      '&types=' +
+      request.types.toString() +
+      '&key=' +
+      API_KEY,
+  )
+    .then(response => response.json())
+    .then(response => {
+      console.log(response.results);
+
+      // Get data from Firebase for each place in response
+
+      // Format into an object to be returned
+    });
 }
