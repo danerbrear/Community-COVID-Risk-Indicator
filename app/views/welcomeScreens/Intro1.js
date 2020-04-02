@@ -20,7 +20,8 @@ const Intro1 = props => {
           {languages.t('label.private_kit')}
         </Text>
         <Text style={styles.infoCardBodyText}>
-          {languages.t('label.intro1_para1')}
+          Designed with location and data privacy at its heart, the COVID-19
+          Risk Indicator is here to give you detailed insight on your community.
         </Text>
       </View>
       <View style={styles.navigationDotsView}>

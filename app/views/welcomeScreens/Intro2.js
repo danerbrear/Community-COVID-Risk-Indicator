@@ -13,17 +13,16 @@ const Intro2 = props => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.infoCard}>
-        <Text style={styles.infoCardHeadText}>
-          {languages.t('label.intro2_title1')}
-        </Text>
+        <Text style={styles.infoCardHeadText}>Help your community</Text>
         <Text style={styles.infoCardBodyText}>
-          {languages.t('label.intro2_para1')}
+          Give {languages.t('label.private_kit')} the option to anonymously log
+          your location history. In the event you are infected with the virus,
+          we can alert others of the places you've been without giving away any
+          of your personal information.
         </Text>
-        <Text style={styles.infoCardHeadText}>
-          {languages.t('label.intro2_title2')}
-        </Text>
+        <Text style={styles.infoCardHeadText}>Already Infected?</Text>
         <Text style={styles.infoCardBodyText}>
-          {languages.t('label.intro2_para2')}
+          You can also import your location history through Google.
         </Text>
       </View>
 
