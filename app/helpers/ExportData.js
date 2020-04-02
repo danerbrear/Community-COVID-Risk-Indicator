@@ -1,5 +1,6 @@
 import database from '@react-native-firebase/database';
 import { GetStoreData, SetStoreData } from './General';
+import place_types from '../constants/place_types';
 
 const API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
 
@@ -15,7 +16,6 @@ export async function ExportLocationData() {
     }
 
     locationData = JSON.parse(locationArray);
-    console.log('Exporting location history: ', locationData);
 
     // Max 20 requests right now to prevent spending money on too many unwanted requests
     for (let i = 0; i < Math.min(20, locationData.length); i++) {
@@ -43,8 +43,10 @@ export async function ExportLocationData() {
 
               // Increment that places count of infected people
               if (snapshot.val() === null) {
+                console.log('Exporting new infected place.');
                 await ref.set({ count: 1 });
               } else {
+                console.log('Adding to count of exisiting infected place.');
                 await ref.set({ count: snapshot.val().count + 1 });
               }
             }
@@ -68,17 +70,7 @@ export async function NearbyPlacesRequest(location = null) {
   const request = {
     key: API_KEY,
     location: location,
-    radius: '30',
-    types: [
-      'restaurant',
-      'airport',
-      'amusement_park',
-      'aquarium',
-      'art_gallery',
-      'bank',
-      'bakery',
-      // 'bar',
-    ],
+    radius: '100',
   };
 
   let result = [];
@@ -91,7 +83,7 @@ export async function NearbyPlacesRequest(location = null) {
       '&radius=' +
       request.radius +
       '&types=' +
-      request.types.toString() +
+      place_types.toString() +
       '&key=' +
       API_KEY,
   )

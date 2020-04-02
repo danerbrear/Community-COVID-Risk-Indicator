@@ -36,18 +36,18 @@ function saveLocation(location) {
       }
     }
 
-    // Backfill the stationary points, if available
-    if (curated.length >= 1) {
-      let lastLocationArray = curated[curated.length - 1];
-      let lastTS = lastLocationArray['time'];
-      for (
-        ;
-        lastTS < unixtimeUTC - locationInterval;
-        lastTS += locationInterval
-      ) {
-        curated.push(JSON.parse(JSON.stringify(lastLocationArray)));
-      }
-    }
+    // // Backfill the stationary points, if available
+    // if (curated.length >= 1) {
+    //   let lastLocationArray = curated[curated.length - 1];
+    //   let lastTS = lastLocationArray['time'];
+    //   for (
+    //     ;
+    //     lastTS < unixtimeUTC - locationInterval;
+    //     lastTS += locationInterval
+    //   ) {
+    //     curated.push(JSON.parse(JSON.stringify(lastLocationArray)));
+    //   }
+    // }
 
     // Save the location using the current lat-lon and the
     // calculated UTC time (maybe a few milliseconds off from
@@ -61,6 +61,7 @@ function saveLocation(location) {
       time: unixtimeUTC,
     };
     curated.push(lat_lon_time);
+    console.log('Curated location history: ', curated);
 
     SetStoreData('LOCATION_DATA', curated);
   });
