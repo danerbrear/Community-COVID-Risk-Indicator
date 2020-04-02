@@ -17,14 +17,12 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import colors from '../constants/colors';
 import LocationServices from '../services/LocationService';
 import BroadcastingServices from '../services/BroadcastingService';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import exportImage from './../assets/images/export.png';
 import news from './../assets/images/newspaper.png';
 import kebabIcon from './../assets/images/kebabIcon.png';
-import pkLogo from './../assets/images/PKLogo.png';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import { ExportLocationData, NearbyPlacesRequest } from '../helpers/ExportData';
@@ -34,7 +32,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width;
-const DELTA = 0.006;
+const DELTA = 0.004;
 
 class LocationTracking extends Component {
   constructor(props) {
@@ -80,7 +78,6 @@ class LocationTracking extends Component {
   findCoordinates = async () => {
     await Geolocation.getCurrentPosition(
       async position => {
-        console.log('Cordssdafds: ', position.coords);
         position.coords.latitudeDelta = DELTA;
         position.coords.longitudeDelta = DELTA;
 
@@ -109,10 +106,6 @@ class LocationTracking extends Component {
 
   import() {
     this.props.navigation.navigate('ImportScreen', {});
-  }
-
-  overlap() {
-    this.props.navigation.navigate('OverlapScreen', {});
   }
 
   willParticipate = () => {
@@ -172,7 +165,8 @@ class LocationTracking extends Component {
         <MapView
           provider={PROVIDER_GOOGLE}
           style={styles.mapView}
-          region={this.state.location}>
+          region={this.state.location}
+          showsUserLocation={true}>
           <MapView.Heatmap
             points={this.state.heatmapPoints}
             dissipating={false}
@@ -225,13 +219,6 @@ class LocationTracking extends Component {
                   style={styles.stopLoggingButtonTouchable}>
                   <Text style={styles.stopLoggingButtonText}>
                     {languages.t('label.stop_logging')}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => this.overlap()}
-                  style={styles.checkOverlapButtonTouchable}>
-                  <Text style={styles.startLoggingButtonText}>
-                    {languages.t('label.overlap')}
                   </Text>
                 </TouchableOpacity>
               </>
@@ -324,14 +311,14 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     position: 'absolute',
-    flex: 3,
+    flex: 2,
     flexDirection: 'column',
     bottom: 30,
     height: '25%',
     width: '100%',
   },
   logButtonsView: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'column',
   },
   actionButtonsView: {
@@ -343,21 +330,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 2,
   },
-  checkOverlapButtonTouchable: {
-    borderRadius: 12,
-    backgroundColor: '#665eff',
-    alignSelf: 'center',
-    width: width * 0.7866,
-    flex: 1,
-    justifyContent: 'center',
-    zIndex: 2,
-  },
   startLoggingButtonTouchable: {
     borderRadius: 12,
     backgroundColor: '#665eff',
     alignSelf: 'center',
     width: width * 0.7866,
-    flex: 0.5,
+    flex: 1,
     justifyContent: 'center',
     zIndex: 2,
   },

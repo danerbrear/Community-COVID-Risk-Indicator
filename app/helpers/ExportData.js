@@ -7,9 +7,10 @@ const API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
 scores for their location history */
 export async function ExportLocationData() {
   try {
-    const locationArray = await GetStoreData('LOCATION_DATA');
+    let locationArray = await GetStoreData('LOCATION_DATA');
 
     if (locationArray === null) {
+      console.log('No location history.');
       return;
     }
 
@@ -28,22 +29,27 @@ export async function ExportLocationData() {
       )
         .then(response => response.json())
         .then(async responseJson => {
-          const locationDetails = responseJson.results[0];
+          console.log('JSON Response: ', responseJson);
+          if (responseJson.status === 'OK') {
+            const locationDetails = responseJson.results[0];
 
-          // Make sure this location isn't a neighborhood - we don't want to track people's homes
-          if (locationDetails.types.indexOf('neighborhood') === -1) {
-            const placeID = locationDetails.place_id;
+            // Make sure this location isn't a neighborhood - we don't want to track people's homes
+            if (locationDetails.types.indexOf('neighborhood') === -1) {
+              const placeID = locationDetails.place_id;
 
-            // Update risk score in Firebase for this place ID
-            const ref = database().ref(`/${placeID}`);
-            const snapshot = await ref.once('value');
+              // Update risk score in Firebase for this place ID
+              const ref = database().ref(`/${placeID}`);
+              const snapshot = await ref.once('value');
 
-            // Increment that places count of infected people
-            if (snapshot.val() === null) {
-              await ref.set({ count: 1 });
-            } else {
-              await ref.set({ count: snapshot.val().count + 1 });
+              // Increment that places count of infected people
+              if (snapshot.val() === null) {
+                await ref.set({ count: 1 });
+              } else {
+                await ref.set({ count: snapshot.val().count + 1 });
+              }
             }
+          } else {
+            console.error('Google Request Error.');
           }
 
           //End .then execution
@@ -91,7 +97,6 @@ export async function NearbyPlacesRequest(location = null) {
   )
     .then(response => response.json())
     .then(async response => {
-      console.log(response.results);
       // Format places into an object to be returned
       let promises = response.results.map(async place => {
         // Make firebase reference
@@ -116,7 +121,7 @@ export async function NearbyPlacesRequest(location = null) {
       let placesData = await Promise.all(promises);
       const places = placesData.filter(x => x.weight !== null);
 
-      console.log('Read places: ', places);
+      console.log('Infected nearby locations: ', places);
       result = places;
     });
   return result;

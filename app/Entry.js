@@ -8,7 +8,6 @@ import Welcome from './views/Welcome';
 import NewsScreen from './views/News';
 import ExportScreen from './views/Export';
 import ImportScreen from './views/Import';
-import OverlapScreen from './views/Overlap';
 import LicencesScreen from './views/Licenses';
 import Slider from './views/welcomeScreens/Slider';
 import { GetStoreData } from './helpers/General';
@@ -26,7 +25,7 @@ class Entry extends Component {
   componentDidMount() {
     GetStoreData('PARTICIPATE')
       .then(isParticipating => {
-        console.log("Entry.js: Is participating: ", isParticipating);
+        console.log('Entry.js: Is participating: ', isParticipating);
         this.setState({
           initialRouteName: isParticipating,
         });
@@ -35,7 +34,7 @@ class Entry extends Component {
   }
 
   render() {
-    console.log("Rendering route: ", this.state.initialRouteName)
+    console.log('Rendering route: ', this.state.initialRouteName);
     return (
       <NavigationContainer>
         <SafeAreaView style={{ flex: 1 }}>
@@ -86,11 +85,6 @@ class Entry extends Component {
             <Stack.Screen
               name='LicensesScreen'
               component={LicencesScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='OverlapScreen'
-              component={OverlapScreen}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
