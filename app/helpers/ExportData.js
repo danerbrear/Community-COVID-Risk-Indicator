@@ -107,12 +107,16 @@ export async function NearbyPlacesRequest(location = null) {
   let results = responseJson.results;
 
   // If more than 20 results, append next 20 results to current list
-  if (responseJson.next_page_token !== undefined) {
-    console.log('has next page.');
-
-    //Wait for page token to become valid
+  let next_page_token = responseJson.next_page_token;
+  // Count is a safety measure
+  let count = 0;
+  while (next_page_token !== undefined && count < 3) {
+    /*
+    Wait for page token to become valid - NOTE: Works most of the time, however for latency issues
+     out of our control there are occasions where we receive an INVALID REQUEST
+    */
     await new Promise(resolve => {
-      setTimeout(resolve, 250);
+      setTimeout(resolve, 100);
     });
 
     const response2 = await fetch(
@@ -120,25 +124,26 @@ export async function NearbyPlacesRequest(location = null) {
         'key=' +
         API_KEY +
         '&pagetoken=' +
-        responseJson.next_page_token,
+        next_page_token,
     );
     const responseJson2 = await response2.json();
 
-    // console.log(responseJson2);
-    console.log(
-      'Number of results: ',
-      results.length + responseJson2.results.length,
-    );
+    console.log(responseJson2.status);
 
-    result = await this.mapData(results.concat(responseJson2.results));
+    // Prevent appending anything in case of error
+    if (responseJson2.status === 'OK') {
+      // Append new results to aggregate result list
+      results = results.concat(responseJson2.results);
+    }
 
-    console.log('returning result');
-    return result;
-  } else {
-    console.log('Number of results: ', results.length);
-    result = await this.mapData(results);
-    return result;
+    next_page_token = responseJson2.next_page_token;
+    count++;
   }
+
+  console.log('Number of results: ', results.length);
+
+  result = await this.mapData(results);
+  return result;
 }
 
 // Helper function that reads from firebase and then filters data to get an array of nearby infected locations
