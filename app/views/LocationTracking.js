@@ -81,13 +81,18 @@ class LocationTracking extends Component {
         position.coords.latitudeDelta = DELTA;
         position.coords.longitudeDelta = DELTA;
 
+        this.setState({
+          location: position.coords,
+        });
+
         let heatmapPoints = await NearbyPlacesRequest({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
+        console.log('Got heatmap points.');
 
+        // Separate setState call because previous function can take a while and we want the current location ASAP
         this.setState({
-          location: position.coords,
           heatmapPoints: heatmapPoints,
         });
       },

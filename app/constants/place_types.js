@@ -7,6 +7,12 @@ const place_types = [
   'bank',
   'bakery',
   'bar',
+  'locality',
+  'establishment',
+  'premise',
+  'university',
+  'food',
+  'store',
 ];
 
 export default place_types;
