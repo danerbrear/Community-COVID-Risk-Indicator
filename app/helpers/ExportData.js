@@ -62,7 +62,7 @@ export async function NearbyPlacesRequest(location = null) {
   const request = {
     key: API_KEY,
     location: location,
-    radius: '20',
+    radius: '30',
     types: [
       'restaurant',
       'airport',
@@ -71,11 +71,13 @@ export async function NearbyPlacesRequest(location = null) {
       'art_gallery',
       'bank',
       'bakery',
-      'bar',
+      // 'bar',
     ],
   };
 
-  fetch(
+  let result = [];
+
+  await fetch(
     'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
       location.latitude +
       ',' +
@@ -88,11 +90,34 @@ export async function NearbyPlacesRequest(location = null) {
       API_KEY,
   )
     .then(response => response.json())
-    .then(response => {
+    .then(async response => {
       console.log(response.results);
+      // Format places into an object to be returned
+      let promises = response.results.map(async place => {
+        // Make firebase reference
+        const ref = database().ref(`/${place.place_id}`);
+        // Read data for this place
+        const snapshot = await ref.once('value');
+        if (snapshot.val() !== null) {
+          return {
+            latitude: place.geometry.location.lat,
+            longitude: place.geometry.location.lng,
+            weight: snapshot.val().count,
+          };
+        } else {
+          return {
+            latitude: place.geometry.location.lat,
+            longitude: place.geometry.location.lng,
+            weight: null,
+          };
+        }
+      });
 
-      // Get data from Firebase for each place in response
+      let placesData = await Promise.all(promises);
+      const places = placesData.filter(x => x.weight !== null);
 
-      // Format into an object to be returned
+      console.log('Read places: ', places);
+      result = places;
     });
+  return result;
 }

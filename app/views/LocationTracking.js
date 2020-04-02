@@ -34,7 +34,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width;
-const DELTA = 0.03;
+const DELTA = 0.006;
 
 class LocationTracking extends Component {
   constructor(props) {
@@ -49,6 +49,7 @@ class LocationTracking extends Component {
         latitudeDelta: DELTA,
         longitudeDelta: DELTA,
       },
+      heatmapPoints: [],
     };
   }
 
@@ -76,15 +77,21 @@ class LocationTracking extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
-  findCoordinates = () => {
-    Geolocation.getCurrentPosition(
-      position => {
+  findCoordinates = async () => {
+    await Geolocation.getCurrentPosition(
+      async position => {
+        console.log('Cordssdafds: ', position.coords);
         position.coords.latitudeDelta = DELTA;
         position.coords.longitudeDelta = DELTA;
-        this.setState({ location: position.coords });
-        NearbyPlacesRequest({
-          latitude: this.state.location.latitude,
-          longitude: this.state.location.longitude,
+
+        let heatmapPoints = await NearbyPlacesRequest({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+
+        this.setState({
+          location: position.coords,
+          heatmapPoints: heatmapPoints,
         });
       },
       error => Alert.alert(error.message),
@@ -165,8 +172,16 @@ class LocationTracking extends Component {
         <MapView
           provider={PROVIDER_GOOGLE}
           style={styles.mapView}
-          region={this.state.location}
-        />
+          region={this.state.location}>
+          <MapView.Heatmap
+            points={this.state.heatmapPoints}
+            dissipating={false}
+            opacity={1}
+            radius={50}
+            gradientSmoothing={10}
+            heatmapMode={'POINTS_DENSITY'}
+          />
+        </MapView>
         {/*Modal just for licenses*/}
         <View style={styles.headerContainer}>
           <Text style={styles.headerTitle}>
