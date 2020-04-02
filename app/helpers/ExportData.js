@@ -111,6 +111,10 @@ export async function NearbyPlacesRequest(location = null) {
     console.log('has next page.');
 
     //Wait for page token to become valid
+    await new Promise(resolve => {
+      setTimeout(resolve, 250);
+    });
+
     const response2 = await fetch(
       'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' +
         'key=' +
@@ -119,12 +123,15 @@ export async function NearbyPlacesRequest(location = null) {
         responseJson.next_page_token,
     );
     const responseJson2 = await response2.json();
+
     // console.log(responseJson2);
     console.log(
       'Number of results: ',
       results.length + responseJson2.results.length,
     );
+
     result = await this.mapData(results.concat(responseJson2.results));
+
     console.log('returning result');
     return result;
   } else {
