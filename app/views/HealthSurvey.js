@@ -9,6 +9,7 @@ import {
   BackHandler,
   Dimensions,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
 import colors from '../constants/colors';
 import backArrow from './../assets/images/backArrow.png';
@@ -21,6 +22,8 @@ class NewsScreen extends Component {
     super(props);
     this.state = {
       surveyPage: 0,
+      date: new Date(),
+      errorMessage: '',
     };
   }
 
@@ -30,6 +33,7 @@ class NewsScreen extends Component {
     } else {
       this.setState({
         surveyPage: this.state.surveyPage - 1,
+        errorMessage: '',
       });
     }
     return true;
@@ -41,14 +45,27 @@ class NewsScreen extends Component {
     } else {
       this.setState({
         surveyPage: this.state.surveyPage - 1,
+        errorMessage: '',
       });
     }
     return true;
   };
 
   next() {
+    if (
+      survey[this.state.surveyPage].datePicker &&
+      this.state.date > new Date()
+    ) {
+      this.setState({
+        errorMessage: 'Please enter a today or a previous date.',
+      });
+      return;
+    }
+
+    console.log(this.state.date);
     this.setState({
       surveyPage: this.state.surveyPage + 1,
+      errorMessage: '',
     });
   }
 
@@ -86,6 +103,15 @@ class NewsScreen extends Component {
           <Text style={styles.bodyText}>
             {survey[this.state.surveyPage].bodyText}
           </Text>
+          {survey[this.state.surveyPage].datePicker && (
+            <DatePicker
+              date={this.state.date}
+              onDateChange={date => {
+                this.setState({ date: date });
+              }}
+            />
+          )}
+          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
           {buttons}
         </View>
       </SafeAreaView>
@@ -164,6 +190,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 19,
     letterSpacing: 0,
+    textAlign: 'center',
+  },
+  errorMessage: {
+    color: 'red',
     textAlign: 'center',
   },
 });

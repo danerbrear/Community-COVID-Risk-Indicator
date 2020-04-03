@@ -193,6 +193,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-date-picker')
     implementation project(':react-native-vector-icons')
     implementation project(':@react-native-community_geolocation')
     implementation project(':react-native-webview')

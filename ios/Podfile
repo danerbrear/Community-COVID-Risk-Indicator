@@ -54,6 +54,8 @@ target 'PrivateKit' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
+
   target 'PrivateKitTests' do
     inherit! :search_paths
     # Pods for testing
