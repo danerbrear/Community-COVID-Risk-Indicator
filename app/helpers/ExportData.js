@@ -42,6 +42,11 @@ export async function ExportLocationData() {
               intersectionExists =
                 b.indexOf(e) === -1 ? intersectionExists : true;
             });
+            // Double check to make sure no neighborhoods
+            intersectionExists =
+              locationDetails.types.indexOf('neighborhood') === -1
+                ? intersectionExists
+                : false;
             console.log('Location Types: ', locationDetails.types);
             console.log('Intersected: ', intersectionExists);
             if (!intersectionExists) {
