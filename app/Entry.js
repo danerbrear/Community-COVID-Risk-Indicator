@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native';
 import LocationTracking from './views/LocationTracking';
 import Welcome from './views/Welcome';
-import NewsScreen from './views/News';
+import NewsScreen from './views/HealthSurvey';
 import ExportScreen from './views/Export';
 import ImportScreen from './views/Import';
 import LicencesScreen from './views/Licenses';
