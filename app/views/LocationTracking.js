@@ -10,6 +10,7 @@ import {
   Image,
   ScrollView,
   BackHandler,
+  Alert,
 } from 'react-native';
 import {
   Menu,
@@ -146,6 +147,23 @@ class LocationTracking extends Component {
     this.props.navigation.navigate('LicensesScreen', {});
   }
 
+  confirmStopLog = () => {
+    Alert.alert(
+      'Stop Logging Location?',
+      'If you get sick, this info will be extremely helpful to others using the app. Your location does not leave your phone if you are not sick',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            this.setOptOut();
+          },
+        },
+        { text: 'Cancel', style: 'cancel' },
+      ],
+      { cancelable: true },
+    );
+  };
+
   willParticipate = () => {
     SetStoreData('PARTICIPATE', 'true').then(() => {
       LocationServices.start();
@@ -212,23 +230,20 @@ class LocationTracking extends Component {
                 }}>
                 <Text style={styles.menuOptionText}>Licenses</Text>
               </MenuOption>
+              {this.state.isLogging && (
+                <MenuOption onSelect={this.confirmStopLog}>
+                  <Text style={styles.menuOptionText}>
+                    Stop Logging Location History
+                  </Text>
+                </MenuOption>
+              )}
             </MenuOptions>
           </Menu>
         </View>
 
         <View style={styles.buttonsContainer}>
           <View style={styles.logButtonsView}>
-            {this.state.isLogging ? (
-              <>
-                <TouchableOpacity
-                  onPress={() => this.setOptOut()}
-                  style={styles.stopLoggingButtonTouchable}>
-                  <Text style={styles.stopLoggingButtonText}>
-                    {languages.t('label.stop_logging')}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            ) : (
+            {!this.state.isLogging && (
               <>
                 <TouchableOpacity
                   onPress={() => this.willParticipate()}
