@@ -370,6 +370,8 @@ PODS:
     - React
   - RNShare (3.1.1):
     - React
+  - RNVectorIcons (6.6.0):
+    - React
   - RNZipArchive (5.0.1):
     - React
     - RNZipArchive/Core (= 5.0.1)
@@ -433,6 +435,7 @@ DEPENDENCIES:
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNZipArchive (from `../node_modules/react-native-zip-archive`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -550,6 +553,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNShare:
     :path: "../node_modules/react-native-share"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   RNZipArchive:
     :path: "../node_modules/react-native-zip-archive"
   Yoga:
@@ -620,10 +625,11 @@ SPEC CHECKSUMS:
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNScreens: 254da4b84f25971cbb30ed3ddc84131f23cac812
   RNShare: a4d8a4e7b85194fcc05f6753bd484f4eba6b833d
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNZipArchive: 87111bb6130a38edd68c8d2059d46ac94d53ffe4
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: d2937879525703eb25f64d627cc0d8cbd08ec243
+PODFILE CHECKSUM: bfeb95f710a4463ea5ed58f994f46ec27ff31791
 
 COCOAPODS: 1.9.1

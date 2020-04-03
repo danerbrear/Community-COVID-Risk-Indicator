@@ -23,6 +23,7 @@ import BackgroundGeolocation from '@mauron85/react-native-background-geolocation
 import exportImage from './../assets/images/export.png';
 import news from './../assets/images/newspaper.png';
 import kebabIcon from './../assets/images/kebabIcon.png';
+import Icon from 'react-native-vector-icons/Fontisto';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import { ExportLocationData, NearbyPlacesRequest } from '../helpers/ExportData';
@@ -272,12 +273,7 @@ class LocationTracking extends Component {
             <TouchableOpacity
               onPress={() => this.news()}
               style={styles.actionButtonsTouchable}>
-              <Image
-                style={styles.actionButtonImage}
-                source={news}
-                resizeMode={'contain'}
-              />
-              <Text style={styles.actionButtonText}>New Entry</Text>
+              <Icon name='injection-syringe' color='white' size={40} />
             </TouchableOpacity>
           </View>
         </View>
@@ -372,8 +368,8 @@ const styles = StyleSheet.create({
   },
   actionButtonsTouchable: {
     height: 76,
-    borderRadius: 8,
-    backgroundColor: '#454f63',
+    borderRadius: 45,
+    backgroundColor: 'red',
     width: width * 0.23,
     justifyContent: 'center',
     alignItems: 'center',
