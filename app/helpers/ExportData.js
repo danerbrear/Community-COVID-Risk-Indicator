@@ -120,23 +120,30 @@ export async function NearbyPlacesRequest(location = null) {
     Wait for page token to become valid - NOTE: Works most of the time, however for latency issues
      out of our control there are occasions where we receive an INVALID REQUEST
     */
-    await new Promise(resolve => {
-      setTimeout(resolve, 100);
-    });
+    let status, responseJson2;
+    let now = new Date();
+    do {
+      await new Promise(resolve => {
+        setTimeout(resolve, 100);
+      });
 
-    const response2 = await fetch(
-      'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' +
-        'key=' +
-        API_KEY +
-        '&pagetoken=' +
-        next_page_token,
-    );
-    const responseJson2 = await response2.json();
-
-    console.log(responseJson2.status);
+      const response2 = await fetch(
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' +
+          'key=' +
+          API_KEY +
+          '&pagetoken=' +
+          next_page_token,
+      );
+      responseJson2 = await response2.json();
+      status = responseJson2.status;
+      if (new Date() - now > 10000) {
+        console.log('[ERROR] Timeout waiting for valid next page token.');
+        break;
+      }
+    } while (status === 'INVALID_REQUEST');
 
     // Prevent appending anything in case of error
-    if (responseJson2.status === 'OK') {
+    if (status === 'OK') {
       // Append new results to aggregate result list
       results = results.concat(responseJson2.results);
     }
