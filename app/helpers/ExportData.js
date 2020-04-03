@@ -90,7 +90,7 @@ export async function NearbyPlacesRequest(location = null) {
   const request = {
     key: API_KEY,
     location: location,
-    radius: '400',
+    radius: '250',
   };
 
   let result = [];
