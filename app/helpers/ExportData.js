@@ -90,7 +90,7 @@ export async function NearbyPlacesRequest(location = null) {
   const request = {
     key: API_KEY,
     location: location,
-    radius: '250',
+    radius: '110',
   };
 
   let result = [];
@@ -113,9 +113,9 @@ export async function NearbyPlacesRequest(location = null) {
 
   // If more than 20 results, append next 20 results to current list
   let next_page_token = responseJson.next_page_token;
-  // Count is a safety measure
-  let count = 0;
-  while (next_page_token !== undefined && count < 3) {
+  // Makes the request different so avoids a cached response from google
+  let request_count = 0;
+  while (next_page_token !== undefined) {
     /*
     Wait for page token to become valid - NOTE: Works most of the time, however for latency issues
      out of our control there are occasions where we receive an INVALID REQUEST
@@ -132,7 +132,9 @@ export async function NearbyPlacesRequest(location = null) {
           'key=' +
           API_KEY +
           '&pagetoken=' +
-          next_page_token,
+          next_page_token +
+          '&request_count=' +
+          request_count,
       );
       responseJson2 = await response2.json();
       status = responseJson2.status;
@@ -140,6 +142,7 @@ export async function NearbyPlacesRequest(location = null) {
         console.log('[ERROR] Timeout waiting for valid next page token.');
         break;
       }
+      request_count++;
     } while (status === 'INVALID_REQUEST');
 
     // Prevent appending anything in case of error
@@ -149,7 +152,6 @@ export async function NearbyPlacesRequest(location = null) {
     }
 
     next_page_token = responseJson2.next_page_token;
-    count++;
   }
 
   console.log('Number of results: ', results.length);
