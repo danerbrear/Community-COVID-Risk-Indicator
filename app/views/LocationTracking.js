@@ -259,20 +259,6 @@ class LocationTracking extends Component {
           {/* Action buttons */}
           <View style={styles.actionButtonsView}>
             <TouchableOpacity
-              onPress={() => ExportLocationData()}
-              style={styles.actionButtonsTouchable}>
-              <Image
-                style={[
-                  styles.actionButtonImage,
-                  { transform: [{ rotate: '180deg' }] },
-                ]}
-                source={exportImage}
-                resizeMode={'contain'}
-              />
-              <Text style={styles.actionButtonText}>Share</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
               onPress={() => this.news()}
               style={styles.actionButtonsTouchable}>
               <Icon name='injection-syringe' color='white' size={40} />
@@ -314,31 +300,32 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     position: 'absolute',
-    flex: 2,
-    flexDirection: 'column',
+    flex: 1,
+    flexDirection: 'row',
     bottom: 30,
-    height: '25%',
+    height: 70,
     width: '100%',
   },
   logButtonsView: {
-    flex: 1,
+    flex: 4,
     flexDirection: 'column',
+    paddingHorizontal: 12,
   },
   actionButtonsView: {
     width: '100%',
-    paddingHorizontal: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flex: 2,
-    alignItems: 'center',
+    paddingRight: 16,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 1,
+    alignItems: 'flex-end',
     zIndex: 2,
   },
   startLoggingButtonTouchable: {
     borderRadius: 12,
     backgroundColor: '#665eff',
     alignSelf: 'center',
-    width: width * 0.7866,
     flex: 1,
+    width: '100%',
     justifyContent: 'center',
     zIndex: 2,
   },
@@ -350,45 +337,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
   },
-  stopLoggingButtonTouchable: {
-    borderRadius: 12,
-    backgroundColor: '#fd4a4a',
-    height: 52,
-    alignSelf: 'center',
-    width: width * 0.7866,
-    justifyContent: 'center',
-    flex: 1,
-    marginBottom: 10,
-  },
-  stopLoggingButtonText: {
-    fontFamily: 'OpenSans-Bold',
-    fontSize: 14,
-    lineHeight: 19,
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#ffffff',
-  },
   actionButtonsTouchable: {
     height: 76,
     borderRadius: 45,
     backgroundColor: 'red',
-    width: width * 0.23,
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   actionButtonImage: {
     height: 21.6,
     width: 32.2,
-  },
-  actionButtonText: {
-    opacity: 0.56,
-    fontFamily: 'OpenSans-Bold',
-    fontSize: 12,
-    lineHeight: 17,
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#ffffff',
-    marginTop: 6,
   },
   menuOptionText: {
     fontFamily: 'OpenSans-Regular',
