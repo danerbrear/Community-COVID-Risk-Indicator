@@ -12,8 +12,10 @@ const survey = [
     datePicker: true,
   },
   {
-    title: 'Next page',
-    buttonOptions: ['Next'],
+    title: 'Export Location History',
+    bodyText:
+      'Exporting your location history will be crucial for your community to keep up-to-date information on what places have been exposed to COVID-19. All of your location data remains anonymous.',
+    buttonOptions: ['Submit'],
     datePicker: false,
   },
 ];

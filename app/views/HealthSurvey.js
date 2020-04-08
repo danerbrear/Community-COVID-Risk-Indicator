@@ -9,11 +9,13 @@ import {
   BackHandler,
   Dimensions,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import DatePicker from 'react-native-date-picker';
 
 import colors from '../constants/colors';
 import backArrow from './../assets/images/backArrow.png';
 import survey from '../constants/survey';
+import { ExportLocationData } from '../helpers/ExportData';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
@@ -69,6 +71,12 @@ class NewsScreen extends Component {
     });
   }
 
+  async submit() {
+    async () => await ExportLocationData();
+    Toast.show('Submitted!');
+    this.props.navigation.navigate('LocationTrackingScreen', {});
+  }
+
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
   }
@@ -78,13 +86,38 @@ class NewsScreen extends Component {
   }
 
   render() {
-    const buttons = survey[this.state.surveyPage].buttonOptions.map(btn => (
-      <TouchableOpacity
-        style={btn === 'No' ? styles.negativeButton : styles.positiveButton}
-        onPress={btn !== 'No' ? () => this.next() : () => this.backToMain()}>
-        <Text style={styles.buttonText}>{btn}</Text>
-      </TouchableOpacity>
-    ));
+    const buttons = survey[this.state.surveyPage].buttonOptions.map(btn => {
+      console.log(btn);
+      switch (btn) {
+        case 'No':
+          return (
+            <TouchableOpacity
+              style={styles.negativeButton}
+              onPress={() => this.backToMain()}>
+              <Text style={styles.buttonText}>{btn}</Text>
+            </TouchableOpacity>
+          );
+        case 'Next':
+        case 'Yes':
+          return (
+            <TouchableOpacity
+              style={styles.positiveButton}
+              onPress={() => this.next()}>
+              <Text style={styles.buttonText}>{btn}</Text>
+            </TouchableOpacity>
+          );
+        case 'Submit':
+          return (
+            <TouchableOpacity
+              style={styles.positiveButton}
+              onPress={() => this.submit()}>
+              <Text style={styles.buttonText}>{btn}</Text>
+            </TouchableOpacity>
+          );
+        default:
+          console.log('Could not find button type.');
+      }
+    });
 
     return (
       <SafeAreaView style={styles.container}>

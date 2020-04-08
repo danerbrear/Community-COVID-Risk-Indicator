@@ -6,7 +6,8 @@
     "install:pod": "cd ios && pod install",
     "postinstall": "patch-package",
     "postversion": "react-native-version",
-    "format:all": "prettier --write ./app/**/*.js"
+    "format:all": "prettier --write ./app/**/*.js",
+    "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/"
   },
   "lint-staged": {
     "*.js": [
@@ -61,6 +62,7 @@
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-share": "^3.1.0",
+    "react-native-simple-toast": "^1.0.0",
     "react-native-uuid-generator": "^6.1.1",
     "react-native-vector-icons": "^6.6.0",
     "react-native-webview": "^8.1.2",

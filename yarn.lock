@@ -7970,6 +7970,11 @@ react-native-share@^3.1.0:
   resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-3.1.1.tgz#db6bd75318c747fee565f8cc012dd0a846cecca9"
   integrity sha512-3BwSo3lhrUlqqx0LxHF5tyKc927UI6N6pu+o2+agdYjtfdVLeUeyYIjkdYGobcIvviTr4qcr9FJ0AfUCSHvlGQ==
 
+react-native-simple-toast@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-1.0.0.tgz#116f00774c00b082bde2c44585028f4015b9aaaa"
+  integrity sha512-xaMhI1PTNlDs4PF9AflNsD55RDwlPaFpF6iq1qb3o1MCy1nDkYyqRbytwtvUODepPwOvtgMQSDaGW1u0tgUnjw==
+
 react-native-uuid-generator@^6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/react-native-uuid-generator/-/react-native-uuid-generator-6.1.1.tgz#59ca80f1eacd282311593af49fde34331d712b6e"
