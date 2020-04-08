@@ -158,10 +158,18 @@ mapData = async results => {
     // Read data for this place
     const snapshot = await ref.once('value');
     if (snapshot.val() !== null) {
+      // Filter out timestamps longer than 2 weeks ago
+      console.log('Keys: ', Object.keys(snapshot.val()));
+      let weight = 0;
+      Object.keys(snapshot.val()).forEach(key => {
+        const date = new Date(snapshot.val()[key].timestamp);
+        weight = date < new Date().now - 12096e5 ? weight : weight + 1;
+      });
+
       return {
         latitude: place.geometry.location.lat,
         longitude: place.geometry.location.lng,
-        weight: snapshot.val().count,
+        weight: weight,
       };
     } else {
       return {
