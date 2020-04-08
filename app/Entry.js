@@ -7,7 +7,6 @@ import LocationTracking from './views/LocationTracking';
 import Welcome from './views/Welcome';
 import NewsScreen from './views/HealthSurvey';
 import ExportScreen from './views/Export';
-import ImportScreen from './views/Import';
 import LicencesScreen from './views/Licenses';
 import Slider from './views/welcomeScreens/Slider';
 import { GetStoreData } from './helpers/General';
@@ -75,11 +74,6 @@ class Entry extends Component {
             <Stack.Screen
               name='ExportScreen'
               component={ExportScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='ImportScreen'
-              component={ImportScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

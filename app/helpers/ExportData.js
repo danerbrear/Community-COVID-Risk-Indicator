@@ -19,63 +19,51 @@ export async function ExportLocationData() {
 
     // Max 20 requests right now to prevent spending money on too many unwanted requests
     for (let i = 0; i < Math.min(20, locationData.length); i++) {
-      fetch(
+      console.log(i);
+      const res = await fetch(
         'https://maps.googleapis.com/maps/api/geocode/json?address=' +
           locationData[i].latitude +
           ',' +
           locationData[i].longitude +
           '&key=' +
           API_KEY,
-      )
-        .then(response => response.json())
-        .then(async responseJson => {
-          if (responseJson.status === 'OK') {
-            const locationDetails = responseJson.results[0];
+      );
+      const responseJson = await res.json();
+      if (responseJson.status === 'OK') {
+        const locationDetails = responseJson.results[0];
 
-            // Filter out types of places that aren't public
-            let intersectionExists = false;
-            let a = place_types,
-              b = locationDetails.types,
-              t;
-            if (b.length > a.length) (t = b), (b = a), (a = t); // indexOf to loop over shorter
-            a.filter(function(e) {
-              intersectionExists =
-                b.indexOf(e) === -1 ? intersectionExists : true;
-            });
-            // Double check to make sure no neighborhoods
-            intersectionExists =
-              locationDetails.types.indexOf('neighborhood') === -1
-                ? intersectionExists
-                : false;
-            console.log('Location Types: ', locationDetails.types);
-            console.log('Intersected: ', intersectionExists);
-            if (!intersectionExists) {
-              return;
-            }
-
-            const placeID = locationDetails.place_id;
-
-            // Update risk score in Firebase for this place ID
-            const ref = database().ref(`/${placeID}`);
-            const snapshot = await ref.once('value');
-
-            // Increment that places count of infected people
-            if (snapshot.val() === null) {
-              console.log(
-                'Exporting new infected place: ',
-                locationDetails.address_components,
-              );
-              await ref.set({ count: 1 });
-            } else {
-              console.log('Adding to count of exisiting infected place.');
-              await ref.set({ count: snapshot.val().count + 1 });
-            }
-          } else {
-            console.error('Google Request Error.');
-          }
-
-          //End .then execution
+        // Filter out types of places that aren't public
+        let intersectionExists = false;
+        let a = place_types,
+          b = locationDetails.types,
+          t;
+        if (b.length > a.length) (t = b), (b = a), (a = t); // indexOf to loop over shorter
+        a.filter(function(e) {
+          intersectionExists = b.indexOf(e) === -1 ? intersectionExists : true;
         });
+        // Double check to make sure no neighborhoods
+        intersectionExists =
+          locationDetails.types.indexOf('neighborhood') === -1
+            ? intersectionExists
+            : false;
+        console.log('Location Types: ', locationDetails.types);
+        console.log('Intersected: ', intersectionExists);
+        if (!intersectionExists) {
+          continue;
+        }
+
+        const placeID = locationDetails.place_id;
+
+        // Update risk score in Firebase for this place ID
+        const ref = database().ref(`/${placeID}`);
+        console.log('Ref: ', ref);
+        const response = await ref.push({
+          timestamp: new Date().toISOString(),
+        });
+        console.log(response);
+      } else {
+        console.error('Google Request Error.');
+      }
     }
   } catch (error) {
     console.log(error);

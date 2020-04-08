@@ -259,19 +259,6 @@ class LocationTracking extends Component {
           {/* Action buttons */}
           <View style={styles.actionButtonsView}>
             <TouchableOpacity
-              onPress={() => this.import()}
-              style={styles.actionButtonsTouchable}>
-              <Image
-                style={styles.actionButtonImage}
-                source={exportImage}
-                resizeMode={'contain'}
-              />
-              <Text style={styles.actionButtonText}>
-                {languages.t('label.import')}
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
               onPress={() => ExportLocationData()}
               style={styles.actionButtonsTouchable}>
               <Image
