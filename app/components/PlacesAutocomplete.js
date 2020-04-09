@@ -8,6 +8,23 @@ class PlacesAutocomplete extends Component {
     super(props);
   }
 
+  setLocation(place, details = null) {
+    if (!details) {
+      console.log('Null place details.');
+      return;
+    }
+    console.log(
+      details.geometry.location.lat,
+      details.geometry.location.lng,
+      place.place_id,
+    );
+    this.props.setRegion(
+      details.geometry.location.lat,
+      details.geometry.location.lng,
+      place.place_id,
+    );
+  }
+
   render() {
     return (
       <GooglePlacesAutocomplete
@@ -41,6 +58,7 @@ class PlacesAutocomplete extends Component {
           language: 'en', // language of the results
           types: 'establishment',
         }}
+        onPress={(place, details) => this.setLocation(place, details)}
       />
     );
   }

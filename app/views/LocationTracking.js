@@ -49,6 +49,7 @@ class LocationTracking extends Component {
         longitude: -122.03118,
         latitudeDelta: DELTA,
         longitudeDelta: DELTA,
+        place_id: null,
       },
       heatmapPoints: [],
     };
@@ -78,6 +79,17 @@ class LocationTracking extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
+  setRegion = (lat, lng, place_id) => {
+    console.log('Setting region: ', lat, lng, place_id);
+    this.setState({
+      location: {
+        latitude: lat,
+        longitude: lng,
+        place_id: place_id,
+      },
+    });
+  };
+
   findCoordinates = async () => {
     await Geolocation.getCurrentPosition(
       async position => {
@@ -97,6 +109,9 @@ class LocationTracking extends Component {
         // Separate setState call because previous function can take a while and we want the current location ASAP
         this.setState({
           heatmapPoints: heatmapPoints,
+          location: {
+            place_id: null,
+          },
         });
       },
       error => Alert.alert(error.message),
@@ -242,7 +257,7 @@ class LocationTracking extends Component {
           </Menu>
         </View>
 
-        <PlacesAutocomplete />
+        <PlacesAutocomplete setRegion={this.setRegion} />
 
         <View style={styles.buttonsContainer}>
           <View style={styles.logButtonsView}>
