@@ -1,8 +1,7 @@
 import database from '@react-native-firebase/database';
 import { GetStoreData, SetStoreData } from './General';
 import place_types from '../constants/place_types';
-
-const API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
+import { API_KEY } from '../../env';
 
 /* Call this function when the survey deems the user is unhealthy and we can update risk
 scores for their location history */

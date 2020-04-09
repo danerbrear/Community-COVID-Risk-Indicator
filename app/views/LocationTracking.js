@@ -25,6 +25,7 @@ import exportImage from './../assets/images/export.png';
 import news from './../assets/images/newspaper.png';
 import kebabIcon from './../assets/images/kebabIcon.png';
 import Icon from 'react-native-vector-icons/Fontisto';
+import PlacesAutocomplete from '../components/PlacesAutocomplete';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
 import { ExportLocationData, NearbyPlacesRequest } from '../helpers/ExportData';
@@ -240,6 +241,8 @@ class LocationTracking extends Component {
             </MenuOptions>
           </Menu>
         </View>
+
+        <PlacesAutocomplete />
 
         <View style={styles.buttonsContainer}>
           <View style={styles.logButtonsView}>
