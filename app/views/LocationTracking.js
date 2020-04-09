@@ -91,6 +91,7 @@ class LocationTracking extends Component {
   };
 
   findCoordinates = async () => {
+    console.log('Focusing map on current location.');
     await Geolocation.getCurrentPosition(
       async position => {
         position.coords.latitudeDelta = DELTA;
@@ -123,13 +124,6 @@ class LocationTracking extends Component {
     BackHandler.exitApp(); // works best when the goBack is async
     return true;
   };
-  export() {
-    this.props.navigation.navigate('ExportScreen', {});
-  }
-
-  import() {
-    this.props.navigation.navigate('ImportScreen', {});
-  }
 
   willParticipate = () => {
     SetStoreData('PARTICIPATE', 'true').then(() => {
@@ -154,10 +148,6 @@ class LocationTracking extends Component {
       }
     });
   };
-
-  news() {
-    this.props.navigation.navigate('NewsScreen', {});
-  }
 
   licenses() {
     this.props.navigation.navigate('LicensesScreen', {});

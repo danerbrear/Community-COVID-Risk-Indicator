@@ -20,15 +20,12 @@ export async function ExportLocationData() {
     // Only use last two weeks of location data
     let two_weeks_ago = new Date();
     two_weeks_ago.setDate(two_weeks_ago.getDate() - 14);
-    console.log('Two weeks ago: ', two_weeks_ago);
     locationData = locationData.filter(function(e) {
-      console.log(new Date(e.time).toDateString());
       return two_weeks_ago < new Date(e.time);
     });
-    console.log(locationData);
 
-    // Max 20 requests right now to prevent spending money on too many unwanted requests
-    for (let i = 0; i < Math.min(20, locationData.length); i++) {
+    // Max 200 requests right now to prevent spending money on too many unwanted requests
+    for (let i = 0; i < Math.min(200, locationData.length); i++) {
       console.log(i);
       const res = await fetch(
         'https://maps.googleapis.com/maps/api/geocode/json?address=' +
@@ -170,7 +167,6 @@ mapData = async results => {
     const snapshot = await ref.once('value');
     if (snapshot.val() !== null) {
       // Filter out timestamps longer than 2 weeks ago
-      console.log('Keys: ', Object.keys(snapshot.val()));
       let weight = 0;
       Object.keys(snapshot.val()).forEach(key => {
         const date = new Date(snapshot.val()[key].timestamp);
@@ -194,6 +190,6 @@ mapData = async results => {
   let placesData = await Promise.all(promises);
   const places = placesData.filter(x => x.weight !== null);
 
-  console.log('Infected nearby locations: ', places);
+  console.log('Number of Infected nearby locations: ', places.length);
   return places;
 };

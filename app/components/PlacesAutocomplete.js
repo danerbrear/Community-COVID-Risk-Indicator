@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Image, Text } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { API_KEY } from '../../env';
 
@@ -9,15 +8,11 @@ class PlacesAutocomplete extends Component {
   }
 
   setLocation(place, details = null) {
+    console.log('Setting location on map.');
     if (!details) {
       console.log('Null place details.');
       return;
     }
-    console.log(
-      details.geometry.location.lat,
-      details.geometry.location.lng,
-      place.place_id,
-    );
     this.props.setRegion(
       details.geometry.location.lat,
       details.geometry.location.lng,
