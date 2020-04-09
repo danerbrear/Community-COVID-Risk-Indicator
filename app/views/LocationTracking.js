@@ -96,6 +96,7 @@ class LocationTracking extends Component {
       async position => {
         position.coords.latitudeDelta = DELTA;
         position.coords.longitudeDelta = DELTA;
+        position.coords.place_id = null; // To tell map that we are not at a searched location
 
         this.setState({
           location: position.coords,
@@ -110,9 +111,6 @@ class LocationTracking extends Component {
         // Separate setState call because previous function can take a while and we want the current location ASAP
         this.setState({
           heatmapPoints: heatmapPoints,
-          location: {
-            place_id: null,
-          },
         });
       },
       error => Alert.alert(error.message),

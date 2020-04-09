@@ -79,6 +79,7 @@ export async function ExportLocationData() {
 }
 
 export async function NearbyPlacesRequest(location = null) {
+  console.log('Finding nearby locations...');
   if (location === null) {
     return;
   }
