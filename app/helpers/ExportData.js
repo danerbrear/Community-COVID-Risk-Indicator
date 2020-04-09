@@ -7,6 +7,7 @@ const API_KEY = 'AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU';
 /* Call this function when the survey deems the user is unhealthy and we can update risk
 scores for their location history */
 export async function ExportLocationData() {
+  console.log('Exporting locations...');
   try {
     let locationArray = await GetStoreData('LOCATION_DATA');
 
@@ -16,6 +17,16 @@ export async function ExportLocationData() {
     }
 
     locationData = JSON.parse(locationArray);
+
+    // Only use last two weeks of location data
+    let two_weeks_ago = new Date();
+    two_weeks_ago.setDate(two_weeks_ago.getDate() - 14);
+    console.log('Two weeks ago: ', two_weeks_ago);
+    locationData = locationData.filter(function(e) {
+      console.log(new Date(e.time).toDateString());
+      return two_weeks_ago < new Date(e.time);
+    });
+    console.log(locationData);
 
     // Max 20 requests right now to prevent spending money on too many unwanted requests
     for (let i = 0; i < Math.min(20, locationData.length); i++) {
@@ -68,6 +79,7 @@ export async function ExportLocationData() {
   } catch (error) {
     console.log(error);
   }
+  console.log('Finished exporting.');
 }
 
 export async function NearbyPlacesRequest(location = null) {
@@ -78,7 +90,7 @@ export async function NearbyPlacesRequest(location = null) {
   const request = {
     key: API_KEY,
     location: location,
-    radius: '110',
+    radius: '150',
   };
 
   let result = [];

@@ -64,7 +64,6 @@ class NewsScreen extends Component {
       return;
     }
 
-    console.log(this.state.date);
     this.setState({
       surveyPage: this.state.surveyPage + 1,
       errorMessage: '',
@@ -72,7 +71,8 @@ class NewsScreen extends Component {
   }
 
   async submit() {
-    async () => await ExportLocationData();
+    await ExportLocationData();
+    console.log('Showing toast');
     Toast.show('Submitted!');
     this.props.navigation.navigate('LocationTrackingScreen', {});
   }
@@ -87,7 +87,6 @@ class NewsScreen extends Component {
 
   render() {
     const buttons = survey[this.state.surveyPage].buttonOptions.map(btn => {
-      console.log(btn);
       switch (btn) {
         case 'No':
           return (

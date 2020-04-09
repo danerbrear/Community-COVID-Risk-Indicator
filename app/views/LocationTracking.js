@@ -34,7 +34,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width;
-const DELTA = 0.004;
+const DELTA = 0.002;
 
 class LocationTracking extends Component {
   constructor(props) {
