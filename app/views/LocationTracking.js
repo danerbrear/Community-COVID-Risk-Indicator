@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   logButtonsView: {
     flex: 4,
     flexDirection: 'column',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
   actionButtonsView: {
     width: '100%',
