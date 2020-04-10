@@ -18,7 +18,8 @@ const Intro2 = props => {
           Give {languages.t('label.private_kit')} the option to anonymously log
           your location history. In the event you are infected with the virus,
           we can alert others of the places you've been without giving away any
-          of your personal information.
+          of your personal information. Any location in a neighborhood is
+          omitted from the location export.
         </Text>
       </View>
 
