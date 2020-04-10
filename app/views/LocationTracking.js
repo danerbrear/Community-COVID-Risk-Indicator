@@ -254,23 +254,31 @@ class LocationTracking extends Component {
           </Menu>
         </View>
 
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ showSearch: !this.state.showSearch });
-          }}
-          style={styles.searchTouchable}>
-          <Icon
-            name={this.state.showSearch ? 'close' : 'search'}
-            color='black'
-            size={20}
-          />
-        </TouchableOpacity>
+        <View style={styles.secondaryButtonView}>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ showSearch: !this.state.showSearch });
+            }}
+            style={styles.secondaryTouchable}>
+            <Icon
+              name={this.state.showSearch ? 'close' : 'search'}
+              color='black'
+              size={20}
+            />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => this.info()}
-          style={styles.infoTouchable}>
-          <Icon name='info' color='black' size={20} />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.info()}
+            style={styles.secondaryTouchable}>
+            <Icon name='info' color='black' size={20} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={this.findCoordinates}
+            style={styles.secondaryTouchable}>
+            <Icon name='crosshairs' color='black' size={20} />
+          </TouchableOpacity>
+        </View>
 
         {this.state.showSearch && (
           <View style={styles.autocompleteContainer}>
@@ -398,33 +406,27 @@ const styles = StyleSheet.create({
     height: 21.6,
     width: 32.2,
   },
-  searchTouchable: {
-    backgroundColor: '#d6d6d6',
-    borderRadius: 25,
-    height: 40,
-    width: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+  secondaryButtonView: {
     position: 'absolute',
-    right: 20,
-    top: 70,
-    shadowOffset: { width: 5, height: 3 },
-    shadowColor: 'gray',
-    shadowOpacity: 0.7,
+    justifyContent: 'space-between',
+    right: 0,
+    top: 50,
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 20,
   },
-  infoTouchable: {
+  secondaryTouchable: {
     backgroundColor: '#d6d6d6',
     borderRadius: 25,
     height: 40,
     width: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    right: 20,
-    top: 130,
+    flex: 1,
     shadowOffset: { width: 5, height: 3 },
     shadowColor: 'gray',
     shadowOpacity: 0.7,
+    marginTop: 20,
   },
   menuOptionText: {
     fontFamily: 'OpenSans-Regular',
