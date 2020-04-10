@@ -51,6 +51,7 @@ class LocationTracking extends Component {
         longitudeDelta: DELTA,
         place_id: null,
       },
+      markerDescription: 'Testtesttest',
       heatmapPoints: [],
       showSearch: false,
     };
@@ -90,6 +91,7 @@ class LocationTracking extends Component {
         longitudeDelta: DELTA,
         place_id: place_id,
       },
+      showSearch: false,
     });
   };
 
@@ -219,6 +221,26 @@ class LocationTracking extends Component {
             gradientSmoothing={10}
             heatmapMode={'POINTS_DENSITY'}
           />
+          {this.state.location.place_id && [
+            <MapView.Marker
+              key='1'
+              coordinate={{
+                latitude: this.state.location.latitude,
+                longitude: this.state.location.longitude,
+              }}></MapView.Marker>,
+            <MapView.Marker
+              key='2'
+              coordinate={{
+                latitude: this.state.location.latitude + 0.0003,
+                longitude: this.state.location.longitude,
+              }}>
+              <View style={styles.markerDescriptionContainer}>
+                <Text style={styles.markerDescription}>
+                  {this.state.markerDescription}
+                </Text>
+              </View>
+            </MapView.Marker>,
+          ]}
         </MapView>
         {/*Modal just for licenses*/}
         <View style={styles.headerContainer}>
@@ -440,6 +462,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 10,
   },
+  markerDescriptionContainer: {
+    backgroundColor: '#d6d6d6',
+    flex: 1,
+    padding: 8,
+    height: 40,
+    zIndex: 3,
+    justifyContent: 'center',
+    borderRadius: 25,
+  },
+  markerDescription: {},
 });
 
 export default LocationTracking;
