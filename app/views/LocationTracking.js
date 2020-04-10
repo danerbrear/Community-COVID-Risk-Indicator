@@ -52,6 +52,7 @@ class LocationTracking extends Component {
         place_id: null,
       },
       heatmapPoints: [],
+      showSearch: false,
     };
   }
 
@@ -85,6 +86,8 @@ class LocationTracking extends Component {
       location: {
         latitude: lat,
         longitude: lng,
+        latitudeDelta: DELTA,
+        longitudeDelta: DELTA,
         place_id: place_id,
       },
     });
@@ -150,6 +153,12 @@ class LocationTracking extends Component {
   licenses() {
     this.props.navigation.navigate('LicensesScreen', {});
   }
+
+  healthSurvey() {
+    this.props.navigation.navigate('HealthSurvey', {});
+  }
+
+  info() {}
 
   confirmStopLog = () => {
     Alert.alert(
@@ -245,7 +254,29 @@ class LocationTracking extends Component {
           </Menu>
         </View>
 
-        <PlacesAutocomplete setRegion={this.setRegion} />
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({ showSearch: !this.state.showSearch });
+          }}
+          style={styles.searchTouchable}>
+          <Icon
+            name={this.state.showSearch ? 'close' : 'search'}
+            color='black'
+            size={20}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => this.info()}
+          style={styles.infoTouchable}>
+          <Icon name='info' color='black' size={20} />
+        </TouchableOpacity>
+
+        {this.state.showSearch && (
+          <View style={styles.autocompleteContainer}>
+            <PlacesAutocomplete setRegion={this.setRegion} />
+          </View>
+        )}
 
         <View style={styles.buttonsContainer}>
           <View style={styles.logButtonsView}>
@@ -263,13 +294,15 @@ class LocationTracking extends Component {
           </View>
 
           {/* Action buttons */}
-          <View style={styles.actionButtonsView}>
-            <TouchableOpacity
-              onPress={() => this.news()}
-              style={styles.actionButtonsTouchable}>
-              <Icon name='injection-syringe' color='white' size={40} />
-            </TouchableOpacity>
-          </View>
+          {!this.state.showSearch && (
+            <View style={styles.actionButtonsView}>
+              <TouchableOpacity
+                onPress={() => this.healthSurvey()}
+                style={styles.actionButtonsTouchable}>
+                <Icon name='injection-syringe' color='white' size={40} />
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </SafeAreaView>
     );
@@ -304,6 +337,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     padding: 5,
   },
+  autocompleteContainer: {
+    flex: 2,
+  },
+  searchButton: {
+    position: 'absolute',
+  },
   buttonsContainer: {
     position: 'absolute',
     flex: 1,
@@ -324,7 +363,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     alignItems: 'flex-end',
-    zIndex: 2,
+    zIndex: 1,
   },
   startLoggingButtonTouchable: {
     borderRadius: 12,
@@ -333,7 +372,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     justifyContent: 'center',
-    zIndex: 2,
+    zIndex: 1,
   },
   startLoggingButtonText: {
     fontFamily: 'OpenSans-Bold',
@@ -351,10 +390,41 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowOffset: { width: 5, height: 3 },
+    shadowColor: 'gray',
+    shadowOpacity: 0.7,
   },
   actionButtonImage: {
     height: 21.6,
     width: 32.2,
+  },
+  searchTouchable: {
+    backgroundColor: '#d6d6d6',
+    borderRadius: 25,
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 20,
+    top: 70,
+    shadowOffset: { width: 5, height: 3 },
+    shadowColor: 'gray',
+    shadowOpacity: 0.7,
+  },
+  infoTouchable: {
+    backgroundColor: '#d6d6d6',
+    borderRadius: 25,
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    right: 20,
+    top: 130,
+    shadowOffset: { width: 5, height: 3 },
+    shadowColor: 'gray',
+    shadowOpacity: 0.7,
   },
   menuOptionText: {
     fontFamily: 'OpenSans-Regular',

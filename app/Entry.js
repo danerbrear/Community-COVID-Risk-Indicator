@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native';
 import LocationTracking from './views/LocationTracking';
 import Welcome from './views/Welcome';
-import NewsScreen from './views/HealthSurvey';
+import HealthSurvey from './views/HealthSurvey';
 import ExportScreen from './views/Export';
 import LicencesScreen from './views/Licenses';
 import Slider from './views/welcomeScreens/Slider';
@@ -67,13 +67,8 @@ class Entry extends Component {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name='NewsScreen'
-              component={NewsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='ExportScreen'
-              component={ExportScreen}
+              name='HealthSurvey'
+              component={HealthSurvey}
               options={{ headerShown: false }}
             />
             <Stack.Screen
