@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -207,141 +207,146 @@ class LocationTracking extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.mapView}
-          region={this.state.location}
-          showsUserLocation={true}>
-          <MapView.Heatmap
-            points={this.state.heatmapPoints}
-            dissipating={false}
-            opacity={1}
-            radius={50}
-            gradientSmoothing={10}
-            heatmapMode={'POINTS_DENSITY'}
-          />
-          {this.state.location.place_id && [
-            <MapView.Marker
-              key='1'
-              coordinate={{
-                latitude: this.state.location.latitude,
-                longitude: this.state.location.longitude,
-              }}></MapView.Marker>,
-            <MapView.Marker
-              key='2'
-              coordinate={{
-                latitude: this.state.location.latitude + 0.0003,
-                longitude: this.state.location.longitude,
-              }}>
-              <View style={styles.markerDescriptionContainer}>
-                <Text style={styles.markerDescription}>
-                  {this.state.markerDescription}
-                </Text>
-              </View>
-            </MapView.Marker>,
-          ]}
-        </MapView>
-        {/*Modal just for licenses*/}
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>
-            {languages.t('label.private_kit')}
-          </Text>
-          <Menu
-            style={{
-              alignSelf: 'center',
-              paddingTop: 8,
-              zIndex: 2,
-              flex: 1,
-              alignContent: 'center',
-            }}>
-            <MenuTrigger style={{ justifyContent: 'center' }}>
-              <Image
-                source={kebabIcon}
+      <Fragment>
+        <SafeAreaView styles={{ flex: 0, backgroundColor: 'white' }} />
+        <SafeAreaView style={styles.container}>
+          <View style={{ flex: 1 }}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerTitle}>
+                {languages.t('label.private_kit')}
+              </Text>
+              <Menu
                 style={{
-                  width: 15,
-                  height: 28,
-                  padding: 14,
-                }}
-              />
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption
-                onSelect={() => {
-                  this.licenses();
+                  alignSelf: 'center',
+                  paddingTop: 8,
+                  zIndex: 2,
+                  flex: 1,
+                  alignContent: 'center',
                 }}>
-                <Text style={styles.menuOptionText}>Licenses</Text>
-              </MenuOption>
-              {this.state.isLogging && (
-                <MenuOption onSelect={this.confirmStopLog}>
-                  <Text style={styles.menuOptionText}>
-                    Stop Logging Location History
-                  </Text>
-                </MenuOption>
-              )}
-            </MenuOptions>
-          </Menu>
-        </View>
+                <MenuTrigger style={{ justifyContent: 'center' }}>
+                  <Image
+                    source={kebabIcon}
+                    style={{
+                      width: 15,
+                      height: 28,
+                      padding: 14,
+                    }}
+                  />
+                </MenuTrigger>
+                <MenuOptions>
+                  <MenuOption
+                    onSelect={() => {
+                      this.licenses();
+                    }}>
+                    <Text style={styles.menuOptionText}>Licenses</Text>
+                  </MenuOption>
+                  {this.state.isLogging && (
+                    <MenuOption onSelect={this.confirmStopLog}>
+                      <Text style={styles.menuOptionText}>
+                        Stop Logging Location History
+                      </Text>
+                    </MenuOption>
+                  )}
+                </MenuOptions>
+              </Menu>
+            </View>
 
-        <View style={styles.secondaryButtonView}>
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({ showSearch: !this.state.showSearch });
-            }}
-            style={styles.secondaryTouchable}>
-            <Icon
-              name={this.state.showSearch ? 'close' : 'search'}
-              color='black'
-              size={20}
-            />
-          </TouchableOpacity>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.mapView}
+              region={this.state.location}
+              showsUserLocation={true}>
+              <MapView.Heatmap
+                points={this.state.heatmapPoints}
+                dissipating={false}
+                opacity={1}
+                radius={50}
+                gradientSmoothing={10}
+                heatmapMode={'POINTS_DENSITY'}
+              />
+              {this.state.location.place_id && [
+                <MapView.Marker
+                  key='1'
+                  coordinate={{
+                    latitude: this.state.location.latitude,
+                    longitude: this.state.location.longitude,
+                  }}></MapView.Marker>,
+                <MapView.Marker
+                  key='2'
+                  coordinate={{
+                    latitude: this.state.location.latitude + 0.0003,
+                    longitude: this.state.location.longitude,
+                  }}>
+                  <View style={styles.markerDescriptionContainer}>
+                    <Text style={styles.markerDescription}>
+                      {this.state.markerDescription}
+                    </Text>
+                  </View>
+                </MapView.Marker>,
+              ]}
+            </MapView>
 
-          <TouchableOpacity
-            onPress={() => this.info()}
-            style={styles.secondaryTouchable}>
-            <Icon name='info' color='black' size={20} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={this.findCoordinates}
-            style={styles.secondaryTouchable}>
-            <Icon name='crosshairs' color='black' size={20} />
-          </TouchableOpacity>
-        </View>
-
-        {this.state.showSearch && (
-          <View style={styles.autocompleteContainer}>
-            <PlacesAutocomplete setRegion={this.setRegion} />
-          </View>
-        )}
-
-        <View style={styles.buttonsContainer}>
-          <View style={styles.logButtonsView}>
-            {!this.state.isLogging && (
-              <>
-                <TouchableOpacity
-                  onPress={() => this.willParticipate()}
-                  style={styles.startLoggingButtonTouchable}>
-                  <Text style={styles.startLoggingButtonText}>
-                    {languages.t('label.start_logging')}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-
-          {/* Action buttons */}
-          {!this.state.showSearch && (
-            <View style={styles.actionButtonsView}>
+            <View style={styles.secondaryButtonView}>
               <TouchableOpacity
-                onPress={() => this.healthSurvey()}
-                style={styles.actionButtonsTouchable}>
-                <Icon name='injection-syringe' color='white' size={40} />
+                onPress={() => {
+                  this.setState({ showSearch: !this.state.showSearch });
+                }}
+                style={styles.secondaryTouchable}>
+                <Icon
+                  name={this.state.showSearch ? 'close' : 'search'}
+                  color='black'
+                  size={20}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.info()}
+                style={styles.secondaryTouchable}>
+                <Icon name='info' color='black' size={20} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={this.findCoordinates}
+                style={styles.secondaryTouchable}>
+                <Icon name='crosshairs' color='black' size={20} />
               </TouchableOpacity>
             </View>
-          )}
-        </View>
-      </SafeAreaView>
+
+            {this.state.showSearch && (
+              <View style={styles.autocompleteContainer}>
+                <PlacesAutocomplete setRegion={this.setRegion} />
+              </View>
+            )}
+
+            <View style={styles.buttonsContainer}>
+              <View style={styles.logButtonsView}>
+                {!this.state.isLogging && (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => this.willParticipate()}
+                      style={styles.startLoggingButtonTouchable}>
+                      <Text style={styles.startLoggingButtonText}>
+                        {languages.t('label.start_logging')}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+
+              {/* Action buttons */}
+              {!this.state.showSearch && (
+                <View style={styles.actionButtonsView}>
+                  <TouchableOpacity
+                    onPress={() => this.healthSurvey()}
+                    style={styles.actionButtonsTouchable}>
+                    <Icon name='injection-syringe' color='white' size={40} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </View>
+        </SafeAreaView>
+      </Fragment>
     );
   }
 }
@@ -353,20 +358,24 @@ const styles = StyleSheet.create({
   },
   mapView: {
     flex: 1,
+    backgroundColor: '#665eff',
   },
   headerContainer: {
     flexDirection: 'row',
-    top: 0,
     zIndex: 2,
-    position: 'absolute',
+    backgroundColor: 'white',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 10,
   },
   headerTitle: {
     flex: 7,
-    textAlign: 'center',
+    justifyContent: 'flex-start',
     fontSize: 38,
     padding: 0,
     fontFamily: 'OpenSans-Bold',
     justifyContent: 'flex-start',
+    color: '#665eff',
+    marginLeft: 25,
   },
   subHeaderTitle: {
     textAlign: 'center',
