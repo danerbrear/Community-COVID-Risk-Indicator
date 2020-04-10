@@ -8,9 +8,9 @@ import PushNotification from 'react-native-push-notification';
 
 let instanceCount = 0;
 let lastPointCount = 0;
-// let locationInterval = 60000 * 5; // Time (in milliseconds) between location information polls.  E.g. 60000*5 = 5 minutes
+let locationInterval = 60000 * 5; // Time (in milliseconds) between location information polls.  E.g. 60000*5 = 5 minutes
 // DEBUG: Reduce Time intervall for faster debugging
-var locationInterval = 5000;
+// var locationInterval = 5000;
 
 function saveLocation(location) {
   // Persist this location data in our local storage of time/lat/lon values
@@ -61,7 +61,6 @@ function saveLocation(location) {
       time: unixtimeUTC,
     };
     curated.push(lat_lon_time);
-    console.log('Curated location history: ', curated);
 
     SetStoreData('LOCATION_DATA', curated);
   });
@@ -90,10 +89,10 @@ export default class LocationServices {
       desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
       stationaryRadius: 5,
       distanceFilter: 5,
-      notificationTitle: 'Private Kit Enabled',
+      notificationTitle: 'Community Risk Indicator Enabled',
       notificationText:
-        'Private Kit is securely storing your GPS coordinates once every five minutes on this device.',
-      debug: true, // when true, it beeps every time a loc is read
+        'Community Risk Indicator is securely storing your GPS coordinates once every five minutes on this device.',
+      debug: false, // when true, it beeps every time a loc is read
       startOnBoot: true,
       stopOnTerminate: false,
       locationProvider: BackgroundGeolocation.DISTANCE_FILTER_PROVIDER,
@@ -227,7 +226,7 @@ export default class LocationServices {
     BackgroundGeolocation.on('stop', () => {
       PushNotification.localNotification({
         title: 'Location Tracking Was Disabled',
-        message: 'Private Kit requires location services.',
+        message: 'Community Risk Indicator requires location services.',
       });
       console.log('[INFO] stop');
     });
@@ -256,7 +255,7 @@ export default class LocationServices {
         setTimeout(
           () =>
             Alert.alert(
-              'Private Kit requires location services to be enabled',
+              'Community Risk Indicator requires location services to be enabled',
               'Would you like to open location settings?',
               [
                 {
@@ -277,7 +276,7 @@ export default class LocationServices {
         setTimeout(
           () =>
             Alert.alert(
-              'Private Kit requires access to location information',
+              'Community Risk Indicator requires access to location information',
               'Would you like to open app settings?',
               [
                 {
@@ -310,7 +309,7 @@ export default class LocationServices {
     // unregister all event listeners
     PushNotification.localNotification({
       title: 'Location Tracking Was Disabled',
-      message: 'Private Kit requires location services.',
+      message: 'Community Risk Indicator requires location services.',
     });
     BackgroundGeolocation.removeAllListeners();
     BackgroundGeolocation.stop();
