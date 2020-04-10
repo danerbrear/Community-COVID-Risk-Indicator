@@ -22,7 +22,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyD4haU0TxYfEBWvNd5DBM5HtTQe3J5nJGU"];
+  [GMSServices provideAPIKey:@"XXXXXXXXXXXXXXXX"];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"PrivateKit"
@@ -81,8 +81,8 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 - (void)applicationWillTerminate:(UIApplication *)application {
   UILocalNotification *notification = [[UILocalNotification alloc] init];
   notification.fireDate = [NSDate dateWithTimeIntervalSinceNow:0];
-  notification.alertTitle = @"Private Kit Was Closed";
-  notification.alertBody = @"Private Kit requires to be running.";
+  notification.alertTitle = @"Community Risk Indicator Was Closed";
+  notification.alertBody = @"Community Risk Indicator requires to be running.";
   notification.timeZone = [NSTimeZone defaultTimeZone];
   notification.soundName = UILocalNotificationDefaultSoundName;
   notification.applicationIconBadgeNumber = 0;
