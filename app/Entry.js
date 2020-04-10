@@ -5,10 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native';
 import LocationTracking from './views/LocationTracking';
 import Welcome from './views/Welcome';
-import NewsScreen from './views/News';
+import HealthSurvey from './views/HealthSurvey';
 import ExportScreen from './views/Export';
-import ImportScreen from './views/Import';
-import OverlapScreen from './views/Overlap';
 import LicencesScreen from './views/Licenses';
 import Slider from './views/welcomeScreens/Slider';
 import { GetStoreData } from './helpers/General';
@@ -26,7 +24,7 @@ class Entry extends Component {
   componentDidMount() {
     GetStoreData('PARTICIPATE')
       .then(isParticipating => {
-        console.log("Entry.js: Is participating: ", isParticipating);
+        console.log('Entry.js: Is participating: ', isParticipating);
         this.setState({
           initialRouteName: isParticipating,
         });
@@ -35,7 +33,7 @@ class Entry extends Component {
   }
 
   render() {
-    console.log("Rendering route: ", this.state.initialRouteName)
+    console.log('Rendering route: ', this.state.initialRouteName);
     return (
       <NavigationContainer>
         <SafeAreaView style={{ flex: 1 }}>
@@ -69,28 +67,13 @@ class Entry extends Component {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name='NewsScreen'
-              component={NewsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='ExportScreen'
-              component={ExportScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='ImportScreen'
-              component={ImportScreen}
+              name='HealthSurvey'
+              component={HealthSurvey}
               options={{ headerShown: false }}
             />
             <Stack.Screen
               name='LicensesScreen'
               component={LicencesScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name='OverlapScreen'
-              component={OverlapScreen}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

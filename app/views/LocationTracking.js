@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   Image,
   ScrollView,
   BackHandler,
+  Alert,
 } from 'react-native';
 import {
   Menu,
@@ -17,23 +18,24 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import colors from '../constants/colors';
 import LocationServices from '../services/LocationService';
 import BroadcastingServices from '../services/BroadcastingService';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 import exportImage from './../assets/images/export.png';
 import news from './../assets/images/newspaper.png';
 import kebabIcon from './../assets/images/kebabIcon.png';
-import pkLogo from './../assets/images/PKLogo.png';
+import Icon from 'react-native-vector-icons/Fontisto';
+import PlacesAutocomplete from '../components/PlacesAutocomplete';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
-import { ExportLocationData } from '../helpers/ExportData';
+import { GetPlaceData, NearbyPlacesRequest } from '../helpers/ExportData';
 import languages from './../locales/languages';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { min } from 'moment';
+import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width;
+const DELTA = 0.002;
 
 class LocationTracking extends Component {
   constructor(props) {
@@ -42,12 +44,16 @@ class LocationTracking extends Component {
     this.state = {
       isLogging: '',
       // Default location is Apple HQ
-      initialRegion: {
+      location: {
         latitude: 37.33182,
         longitude: -122.03118,
-        latitudeDelta: 0.2,
-        longitudeDelta: 0.2,
+        latitudeDelta: DELTA,
+        longitudeDelta: DELTA,
+        place_id: null,
       },
+      markerDescription: 'Testtesttest',
+      heatmapPoints: [],
+      showSearch: false,
     };
   }
 
@@ -62,7 +68,6 @@ class LocationTracking extends Component {
             isLogging: true,
           });
           this.willParticipate();
-          this.getInitialState();
         } else {
           this.setState({
             isLogging: false,
@@ -70,26 +75,61 @@ class LocationTracking extends Component {
         }
       })
       .catch(error => console.log(error));
+    this.findCoordinates();
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
+  setRegion = async (lat, lng, place_id) => {
+    this.setState({ showSearch: false });
+
+    const countExposed = await GetPlaceData(place_id);
+
+    this.setState({
+      location: {
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: DELTA,
+        longitudeDelta: DELTA,
+        place_id: place_id,
+      },
+      markerDescription: `${countExposed} infected people here in last 14 days`,
+    });
+  };
+
+  findCoordinates = async () => {
+    console.log('Focusing map on current location.');
+    await Geolocation.getCurrentPosition(
+      async position => {
+        position.coords.latitudeDelta = DELTA;
+        position.coords.longitudeDelta = DELTA;
+        position.coords.place_id = null; // To tell map that we are not at a searched location
+
+        this.setState({
+          location: position.coords,
+        });
+
+        let heatmapPoints = await NearbyPlacesRequest({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+        console.log('Got heatmap points.');
+
+        // Separate setState call because previous function can take a while and we want the current location ASAP
+        this.setState({
+          heatmapPoints: heatmapPoints,
+        });
+      },
+      error => Alert.alert(error.message),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  };
+
   handleBackPress = () => {
     BackHandler.exitApp(); // works best when the goBack is async
     return true;
   };
-  export() {
-    this.props.navigation.navigate('ExportScreen', {});
-  }
-
-  import() {
-    this.props.navigation.navigate('ImportScreen', {});
-  }
-
-  overlap() {
-    this.props.navigation.navigate('OverlapScreen', {});
-  }
 
   willParticipate = () => {
     SetStoreData('PARTICIPATE', 'true').then(() => {
@@ -105,7 +145,6 @@ class LocationTracking extends Component {
         this.setState({
           isLogging: true,
         });
-        this.getInitialState();
       } else if (authorization === BackgroundGeolocation.NOT_AUTHORIZED) {
         LocationServices.stop(this.props.navigation);
         BroadcastingServices.stop(this.props.navigation);
@@ -116,19 +155,44 @@ class LocationTracking extends Component {
     });
   };
 
-  news() {
-    this.props.navigation.navigate('NewsScreen', {});
-  }
-
   licenses() {
     this.props.navigation.navigate('LicensesScreen', {});
   }
+
+  healthSurvey() {
+    this.props.navigation.navigate('HealthSurvey', {});
+  }
+
+  info() {
+    Alert.alert(
+      'Info',
+      'This app is designed to help your neighbors. Trust your community to log their location so you can see what places they have infected if they become sick, and make sure to return the favor. Your location will stay anonymous even when you submit your location history.',
+      [{ text: 'Okay' }],
+      { cancelable: true },
+    );
+  }
+
+  confirmStopLog = () => {
+    Alert.alert(
+      'Stop Logging Location?',
+      'If you get sick, this info will be extremely helpful to others using the app. Your location does not leave your phone if you are not sick',
+      [
+        {
+          text: 'Yes',
+          onPress: () => {
+            this.setOptOut();
+          },
+        },
+        { text: 'Cancel', style: 'cancel' },
+      ],
+      { cancelable: true },
+    );
+  };
 
   willParticipate = () => {
     SetStoreData('PARTICIPATE', 'true').then(() => {
       LocationServices.start();
       BroadcastingServices.start();
-      this.getInitialState();
       console.log('Initial Region: ', this.state.initialRegion);
     });
     this.setState({
@@ -144,145 +208,148 @@ class LocationTracking extends Component {
     });
   };
 
-  getInitialState = async () => {
-    try {
-      GetStoreData('LOCATION_DATA').then(locationArrayString => {
-        var locationArray = JSON.parse(locationArrayString);
-        if (locationArray === null) {
-          console.log(locationArray);
-        } else {
-          var lastCoords = locationArray[locationArray.length - 1];
-          this.setState({
-            initialRegion: {
-              latitude: lastCoords['latitude'],
-              longitude: lastCoords['longitude'],
-              latitudeDelta: 10.10922,
-              longitudeDelta: 10.20421,
-            },
-          });
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   render() {
     return (
-      <SafeAreaView style={styles.container}>
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.mapView}
-          initialRegion={this.state.initialRegion}
-        />
-        {/*Modal just for licenses*/}
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>
-            {languages.t('label.private_kit')}
-          </Text>
-          <Menu
-            style={{
-              alignSelf: 'center',
-              paddingTop: 8,
-              zIndex: 2,
-              flex: 1,
-              alignContent: 'center',
-            }}>
-            <MenuTrigger style={{ justifyContent: 'center' }}>
-              <Image
-                source={kebabIcon}
-                style={{
-                  width: 15,
-                  height: 28,
-                  padding: 14,
-                }}
-              />
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption
-                onSelect={() => {
-                  this.licenses();
-                }}>
-                <Text style={styles.menuOptionText}>Licenses</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
-        </View>
-
-        <View style={styles.buttonsContainer}>
-          <View style={styles.logButtonsView}>
-            {this.state.isLogging ? (
-              <>
-                <TouchableOpacity
-                  onPress={() => this.setOptOut()}
-                  style={styles.stopLoggingButtonTouchable}>
-                  <Text style={styles.stopLoggingButtonText}>
-                    {languages.t('label.stop_logging')}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => this.overlap()}
-                  style={styles.checkOverlapButtonTouchable}>
-                  <Text style={styles.startLoggingButtonText}>
-                    {languages.t('label.overlap')}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <>
-                <TouchableOpacity
-                  onPress={() => this.willParticipate()}
-                  style={styles.startLoggingButtonTouchable}>
-                  <Text style={styles.startLoggingButtonText}>
-                    {languages.t('label.start_logging')}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-
-          {/* Action buttons */}
-          <View style={styles.actionButtonsView}>
-            <TouchableOpacity
-              onPress={() => this.import()}
-              style={styles.actionButtonsTouchable}>
-              <Image
-                style={styles.actionButtonImage}
-                source={exportImage}
-                resizeMode={'contain'}
-              />
-              <Text style={styles.actionButtonText}>
-                {languages.t('label.import')}
+      <Fragment>
+        <SafeAreaView styles={{ flex: 0, backgroundColor: 'white' }} />
+        <SafeAreaView style={styles.container}>
+          <View style={{ flex: 1 }}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerTitle}>
+                {languages.t('label.private_kit')}
               </Text>
-            </TouchableOpacity>
+              <Menu
+                style={{
+                  alignSelf: 'center',
+                  paddingTop: 8,
+                  zIndex: 2,
+                  flex: 1,
+                  alignContent: 'center',
+                }}>
+                <MenuTrigger style={{ justifyContent: 'center' }}>
+                  <Image
+                    source={kebabIcon}
+                    style={{
+                      width: 15,
+                      height: 28,
+                      padding: 14,
+                    }}
+                  />
+                </MenuTrigger>
+                <MenuOptions>
+                  <MenuOption
+                    onSelect={() => {
+                      this.licenses();
+                    }}>
+                    <Text style={styles.menuOptionText}>Licenses</Text>
+                  </MenuOption>
+                  {this.state.isLogging && (
+                    <MenuOption onSelect={this.confirmStopLog}>
+                      <Text style={styles.menuOptionText}>
+                        Stop Logging Location History
+                      </Text>
+                    </MenuOption>
+                  )}
+                </MenuOptions>
+              </Menu>
+            </View>
 
-            <TouchableOpacity
-              onPress={() => ExportLocationData()}
-              style={styles.actionButtonsTouchable}>
-              <Image
-                style={[
-                  styles.actionButtonImage,
-                  { transform: [{ rotate: '180deg' }] },
-                ]}
-                source={exportImage}
-                resizeMode={'contain'}
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.mapView}
+              region={this.state.location}
+              showsUserLocation={true}>
+              <MapView.Heatmap
+                points={this.state.heatmapPoints}
+                dissipating={false}
+                opacity={1}
+                radius={50}
+                gradientSmoothing={10}
+                heatmapMode={'POINTS_DENSITY'}
               />
-              <Text style={styles.actionButtonText}>Share</Text>
-            </TouchableOpacity>
+              {this.state.location.place_id && [
+                <MapView.Marker
+                  key='1'
+                  coordinate={{
+                    latitude: this.state.location.latitude,
+                    longitude: this.state.location.longitude,
+                  }}></MapView.Marker>,
+                <MapView.Marker
+                  key='2'
+                  coordinate={{
+                    latitude: this.state.location.latitude + 0.0002,
+                    longitude: this.state.location.longitude,
+                  }}>
+                  <View style={styles.markerDescriptionContainer}>
+                    <Text style={styles.markerDescription}>
+                      {this.state.markerDescription}
+                    </Text>
+                  </View>
+                </MapView.Marker>,
+              ]}
+            </MapView>
 
-            <TouchableOpacity
-              onPress={() => this.news()}
-              style={styles.actionButtonsTouchable}>
-              <Image
-                style={styles.actionButtonImage}
-                source={news}
-                resizeMode={'contain'}
-              />
-              <Text style={styles.actionButtonText}>New Entry</Text>
-            </TouchableOpacity>
+            <View style={styles.secondaryButtonView}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({ showSearch: !this.state.showSearch });
+                }}
+                style={styles.secondaryTouchable}>
+                <Icon
+                  name={this.state.showSearch ? 'close' : 'search'}
+                  color='black'
+                  size={20}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => this.info()}
+                style={styles.secondaryTouchable}>
+                <Icon name='info' color='black' size={20} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={this.findCoordinates}
+                style={styles.secondaryTouchable}>
+                <Icon name='crosshairs' color='black' size={20} />
+              </TouchableOpacity>
+            </View>
+
+            {this.state.showSearch && (
+              <View style={styles.autocompleteContainer}>
+                <PlacesAutocomplete setRegion={this.setRegion} />
+              </View>
+            )}
+
+            <View style={styles.buttonsContainer}>
+              <View style={styles.logButtonsView}>
+                {!this.state.isLogging && (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => this.willParticipate()}
+                      style={styles.startLoggingButtonTouchable}>
+                      <Text style={styles.startLoggingButtonText}>
+                        {languages.t('label.start_logging')}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+
+              {/* Action buttons */}
+              {!this.state.showSearch && (
+                <View style={styles.actionButtonsView}>
+                  <TouchableOpacity
+                    onPress={() => this.healthSurvey()}
+                    style={styles.actionButtonsTouchable}>
+                    <Icon name='injection-syringe' color='white' size={40} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </Fragment>
     );
   }
 }
@@ -294,20 +361,24 @@ const styles = StyleSheet.create({
   },
   mapView: {
     flex: 1,
+    backgroundColor: '#665eff',
   },
   headerContainer: {
     flexDirection: 'row',
-    top: 0,
     zIndex: 2,
-    position: 'absolute',
+    backgroundColor: 'white',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 10,
   },
   headerTitle: {
     flex: 7,
-    textAlign: 'center',
+    justifyContent: 'flex-start',
     fontSize: 38,
     padding: 0,
     fontFamily: 'OpenSans-Bold',
     justifyContent: 'flex-start',
+    color: '#665eff',
+    marginLeft: 25,
   },
   subHeaderTitle: {
     textAlign: 'center',
@@ -315,44 +386,42 @@ const styles = StyleSheet.create({
     fontSize: 22,
     padding: 5,
   },
+  autocompleteContainer: {
+    flex: 2,
+  },
+  searchButton: {
+    position: 'absolute',
+  },
   buttonsContainer: {
     position: 'absolute',
-    flex: 3,
-    flexDirection: 'column',
+    flex: 1,
+    flexDirection: 'row',
     bottom: 30,
-    height: '25%',
+    height: 70,
     width: '100%',
   },
   logButtonsView: {
-    flex: 2,
+    flex: 4,
     flexDirection: 'column',
+    paddingHorizontal: 16,
   },
   actionButtonsView: {
     width: '100%',
-    paddingHorizontal: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flex: 2,
-    alignItems: 'center',
-    zIndex: 2,
-  },
-  checkOverlapButtonTouchable: {
-    borderRadius: 12,
-    backgroundColor: '#665eff',
-    alignSelf: 'center',
-    width: width * 0.7866,
-    flex: 1,
+    paddingRight: 16,
+    flexDirection: 'column',
     justifyContent: 'center',
-    zIndex: 2,
+    flex: 1,
+    alignItems: 'flex-end',
+    zIndex: 1,
   },
   startLoggingButtonTouchable: {
     borderRadius: 12,
     backgroundColor: '#665eff',
     alignSelf: 'center',
-    width: width * 0.7866,
-    flex: 0.5,
+    flex: 1,
+    width: '100%',
     justifyContent: 'center',
-    zIndex: 2,
+    zIndex: 1,
   },
   startLoggingButtonText: {
     fontFamily: 'OpenSans-Bold',
@@ -362,51 +431,59 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#ffffff',
   },
-  stopLoggingButtonTouchable: {
-    borderRadius: 12,
-    backgroundColor: '#fd4a4a',
-    height: 52,
-    alignSelf: 'center',
-    width: width * 0.7866,
-    justifyContent: 'center',
-    flex: 1,
-    marginBottom: 10,
-  },
-  stopLoggingButtonText: {
-    fontFamily: 'OpenSans-Bold',
-    fontSize: 14,
-    lineHeight: 19,
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#ffffff',
-  },
   actionButtonsTouchable: {
     height: 76,
-    borderRadius: 8,
-    backgroundColor: '#454f63',
-    width: width * 0.23,
+    borderRadius: 45,
+    backgroundColor: 'red',
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowOffset: { width: 5, height: 3 },
+    shadowColor: 'gray',
+    shadowOpacity: 0.7,
   },
   actionButtonImage: {
     height: 21.6,
     width: 32.2,
   },
-  actionButtonText: {
-    opacity: 0.56,
-    fontFamily: 'OpenSans-Bold',
-    fontSize: 12,
-    lineHeight: 17,
-    letterSpacing: 0,
-    textAlign: 'center',
-    color: '#ffffff',
-    marginTop: 6,
+  secondaryButtonView: {
+    position: 'absolute',
+    justifyContent: 'space-between',
+    right: 0,
+    top: 50,
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 20,
+  },
+  secondaryTouchable: {
+    backgroundColor: '#d6d6d6',
+    borderRadius: 25,
+    height: 40,
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    shadowOffset: { width: 5, height: 3 },
+    shadowColor: 'gray',
+    shadowOpacity: 0.7,
+    marginTop: 20,
   },
   menuOptionText: {
     fontFamily: 'OpenSans-Regular',
     fontSize: 14,
     padding: 10,
   },
+  markerDescriptionContainer: {
+    backgroundColor: '#d6d6d6',
+    flex: 1,
+    padding: 8,
+    height: 40,
+    zIndex: 3,
+    justifyContent: 'center',
+    borderRadius: 25,
+  },
+  markerDescription: {},
 });
 
 export default LocationTracking;

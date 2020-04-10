@@ -14,19 +14,16 @@ const Intro2 = props => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.infoCard}>
-        <Text style={styles.infoCardHeadText}>
-          {languages.t('label.intro3_title1')}
+        <Text style={styles.infoCardHeadText}>Rely On Your Neighbors</Text>
+        <Text style={styles.infoCardBodyText}>
+          COVID Community Risk Indicator works best when everyone participates!
+          If you start to feel sick with symptoms of COVID-19, press the red
+          syringe on the bottom right. Even if you don’t have a positive test
+          result yet, it is better safe than sorry.
         </Text>
         <Text style={styles.infoCardBodyText}>
-          {languages.t('label.intro3_para1')}
-        </Text>
-        <Text
-          onPress={() => Linking.openURL('https://privatekit.mit.edu')}
-          style={[
-            styles.infoCardBodyText,
-            { fontFamily: 'OpenSans-Bold', opacity: 1, marginTop: 12 },
-          ]}>
-          {languages.t('label.intro3_para2')}
+          When a whole community takes this small action, everyone can be bette
+          informed about their risk level.
         </Text>
       </View>
       <View style={styles.navigationDotsView}>

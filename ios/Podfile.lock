@@ -284,6 +284,10 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-background-timer (2.2.0):
     - React
+  - react-native-date-picker (2.7.8):
+    - React
+  - react-native-geolocation (2.0.2):
+    - React
   - react-native-google-maps (0.27.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
@@ -292,6 +296,9 @@ PODS:
     - React
   - react-native-safe-area-context (0.6.0):
     - React
+  - react-native-simple-toast (1.0.0):
+    - React
+    - Toast (~> 4.0.0)
   - react-native-uuid-generator (6.1.1):
     - React
   - react-native-viewpager (3.3.0):
@@ -368,6 +375,8 @@ PODS:
     - React
   - RNShare (3.1.1):
     - React
+  - RNVectorIcons (6.6.0):
+    - React
   - RNZipArchive (5.0.1):
     - React
     - RNZipArchive/Core (= 5.0.1)
@@ -376,6 +385,7 @@ PODS:
     - React
     - SSZipArchive (= 2.2.2)
   - SSZipArchive (2.2.2)
+  - Toast (4.0.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -401,9 +411,12 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-simple-toast (from `../node_modules/react-native-simple-toast`)
   - react-native-uuid-generator (from `../node_modules/react-native-uuid-generator`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -430,6 +443,7 @@ DEPENDENCIES:
   - RNI18n (from `../node_modules/react-native-i18n`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - RNZipArchive (from `../node_modules/react-native-zip-archive`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -455,6 +469,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - SSZipArchive
+    - Toast
 
 EXTERNAL SOURCES:
   "@mauron85_react-native-background-geolocation":
@@ -489,12 +504,18 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-simple-toast:
+    :path: "../node_modules/react-native-simple-toast"
   react-native-uuid-generator:
     :path: "../node_modules/react-native-uuid-generator"
   react-native-viewpager:
@@ -545,6 +566,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNShare:
     :path: "../node_modules/react-native-share"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   RNZipArchive:
     :path: "../node_modules/react-native-zip-archive"
   Yoga:
@@ -586,9 +609,12 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-background-timer: 1f7d560647b40e6a60b01c452ba29c54bf581fc4
+  react-native-date-picker: 808a9657e6032657a7c718ed21a99dfa89ea4b46
+  react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-safe-area-context: d288138da2c800caa111f9352e9333f186a06ead
+  react-native-simple-toast: 6c376bd79b1e255a4bee90a72ead6447f96ea10d
   react-native-uuid-generator: 82ffa2a1cac94242ebed52c4dedc5044d3412717
   react-native-viewpager: a7b438ca32c57b2614ece2a123e7fe116f743131
   react-native-webview: fcb5f377aadc216273300f452ee0d321fb85809b
@@ -614,10 +640,12 @@ SPEC CHECKSUMS:
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
   RNScreens: 254da4b84f25971cbb30ed3ddc84131f23cac812
   RNShare: a4d8a4e7b85194fcc05f6753bd484f4eba6b833d
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   RNZipArchive: 87111bb6130a38edd68c8d2059d46ac94d53ffe4
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 65a9a260866858368b0402c95b12adf92f30c003
+PODFILE CHECKSUM: 5381d9f9d4f11fda4cfa9c30cfa3faf859522593
 
 COCOAPODS: 1.9.1
