@@ -179,7 +179,7 @@ export default class LocationServices {
         setTimeout(
           () =>
             Alert.alert(
-              'Private Kit requires access to location information',
+              'Community Risk Indicator requires access to location information',
               'Would you like to open app settings?',
               [
                 {

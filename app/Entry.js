@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native';
 import LocationTracking from './views/LocationTracking';
 import Welcome from './views/Welcome';
 import HealthSurvey from './views/HealthSurvey';
-import ExportScreen from './views/Export';
 import LicencesScreen from './views/Licenses';
 import Slider from './views/welcomeScreens/Slider';
 import { GetStoreData } from './helpers/General';
