@@ -20,10 +20,6 @@ const Intro2 = props => {
           we can alert others of the places you've been without giving away any
           of your personal information.
         </Text>
-        <Text style={styles.infoCardHeadText}>Already Infected?</Text>
-        <Text style={styles.infoCardBodyText}>
-          You can also import your location history through Google.
-        </Text>
       </View>
 
       <View style={styles.navigationDotsView}>

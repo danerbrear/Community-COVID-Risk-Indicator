@@ -158,7 +158,14 @@ class LocationTracking extends Component {
     this.props.navigation.navigate('HealthSurvey', {});
   }
 
-  info() {}
+  info() {
+    Alert.alert(
+      'Info',
+      'This app is designed to help your neighbors. Trust your community to log their location so you can see what places they have infected if they become sick, and make sure to return the favor. Your location will stay anonymous even when you submit your location history.',
+      [{ text: 'Okay' }],
+      { cancelable: true },
+    );
+  }
 
   confirmStopLog = () => {
     Alert.alert(
