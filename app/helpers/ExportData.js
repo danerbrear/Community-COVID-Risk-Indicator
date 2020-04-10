@@ -78,6 +78,35 @@ export async function ExportLocationData() {
   console.log('Finished exporting.');
 }
 
+export async function GetPlaceData(place_id) {
+  const ref = database().ref(`/${place_id}`);
+  const snapshot = await ref.once('value');
+
+  console.log(snapshot.val());
+
+  // Null means no record of exposure at that location
+  if (!snapshot.val()) {
+    return 0;
+  }
+
+  let exposure_count = 0;
+
+  // Only use last two weeks of location data
+  let two_weeks_ago = new Date();
+  two_weeks_ago.setDate(two_weeks_ago.getDate() - 14);
+  Object.keys(snapshot.val()).forEach(key => {
+    const date = new Date(snapshot.val()[key].timestamp);
+    console.log(
+      'Comparing dates (2 weeks ago, record): ',
+      two_weeks_ago.toDateString(),
+      date.toDateString(),
+    );
+    exposure_count = two_weeks_ago < date ? exposure_count + 1 : exposure_count;
+  });
+
+  return exposure_count;
+}
+
 export async function NearbyPlacesRequest(location = null) {
   console.log('Finding nearby locations...');
   if (location === null) {

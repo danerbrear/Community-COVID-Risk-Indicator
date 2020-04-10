@@ -28,7 +28,7 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import PlacesAutocomplete from '../components/PlacesAutocomplete';
 
 import { GetStoreData, SetStoreData } from '../helpers/General';
-import { ExportLocationData, NearbyPlacesRequest } from '../helpers/ExportData';
+import { GetPlaceData, NearbyPlacesRequest } from '../helpers/ExportData';
 import languages from './../locales/languages';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -81,8 +81,11 @@ class LocationTracking extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
   }
 
-  setRegion = (lat, lng, place_id) => {
-    console.log('Setting region: ', lat, lng, place_id);
+  setRegion = async (lat, lng, place_id) => {
+    this.setState({ showSearch: false });
+
+    const countExposed = await GetPlaceData(place_id);
+
     this.setState({
       location: {
         latitude: lat,
@@ -91,7 +94,7 @@ class LocationTracking extends Component {
         longitudeDelta: DELTA,
         place_id: place_id,
       },
-      showSearch: false,
+      markerDescription: `${countExposed} infected people here in last 14 days`,
     });
   };
 
@@ -274,7 +277,7 @@ class LocationTracking extends Component {
                 <MapView.Marker
                   key='2'
                   coordinate={{
-                    latitude: this.state.location.latitude + 0.0003,
+                    latitude: this.state.location.latitude + 0.0002,
                     longitude: this.state.location.longitude,
                   }}>
                   <View style={styles.markerDescriptionContainer}>
