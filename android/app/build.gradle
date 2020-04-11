@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.risk_indicator.app"
+        applicationId "com.risk"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         multiDexEnabled true

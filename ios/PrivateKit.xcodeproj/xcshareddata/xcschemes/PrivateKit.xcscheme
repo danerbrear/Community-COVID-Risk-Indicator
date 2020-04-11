@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "PrivateKit.app"
+               BuildableName = "RiskIndicator.app"
                BlueprintName = "PrivateKit"
                ReferencedContainer = "container:PrivateKit.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
@@ -59,7 +59,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "PrivateKit.app"
+            BuildableName = "RiskIndicator.app"
             BlueprintName = "PrivateKit"
             ReferencedContainer = "container:PrivateKit.xcodeproj">
          </BuildableReference>
@@ -92,7 +92,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "PrivateKit.app"
+            BuildableName = "RiskIndicator.app"
             BlueprintName = "PrivateKit"
             ReferencedContainer = "container:PrivateKit.xcodeproj">
          </BuildableReference>
@@ -109,14 +109,14 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "PrivateKit.app"
+            BuildableName = "RiskIndicator.app"
             BlueprintName = "PrivateKit"
             ReferencedContainer = "container:PrivateKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Release">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"

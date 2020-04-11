@@ -80,7 +80,7 @@
 		08445F6524284A42008754AC /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		08445F6724284A52008754AC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		08F7452CC6C7457E8B16DBA7 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* PrivateKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PrivateKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* RiskIndicator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RiskIndicator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = PrivateKit/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = PrivateKit/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -288,7 +288,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* PrivateKit.app */,
+				13B07F961A680F5B00A75B9A /* RiskIndicator.app */,
 				00E356EE1AD99517003FC87E /* PrivateKitTests.xctest */,
 			);
 			name = Products;
@@ -335,7 +335,7 @@
 			);
 			name = PrivateKit;
 			productName = PrivateKit;
-			productReference = 13B07F961A680F5B00A75B9A /* PrivateKit.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* RiskIndicator.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -349,10 +349,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						ProvisioningStyle = Manual;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = A35W4MM59Y;
+						DevelopmentTeam = TVA2X82B6Q;
 					};
 				};
 			};
@@ -592,6 +593,8 @@
 			baseConfigurationReference = 6488810A370BB8BB87F0B8DD /* Pods-PrivateKitTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -607,7 +610,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrivateKit.app/PrivateKit";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RiskIndicator.app/RiskIndicator";
 			};
 			name = Debug;
 		};
@@ -628,7 +633,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrivateKit.app/PrivateKit";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RiskIndicator.app/RiskIndicator";
 			};
 			name = Release;
 		};
@@ -637,8 +642,9 @@
 			baseConfigurationReference = A1AA09F7C1773BBAFB3D8751 /* Pods-PrivateKit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dane Brear (B84S8B4A55)";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = A35W4MM59Y;
+				DEVELOPMENT_TEAM = TVA2X82B6Q;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GoogleMaps-3.8.0/Base/Frameworks",
@@ -655,13 +661,15 @@
 				);
 				INFOPLIST_FILE = PrivateKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lc++",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.mit.privatekit;
-				PRODUCT_NAME = PrivateKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "come.risk-indicator.app";
+				PRODUCT_NAME = RiskIndicator;
+				PROVISIONING_PROFILE_SPECIFIER = "Dev2 Prov File";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -671,8 +679,10 @@
 			baseConfigurationReference = D183D19AB48754FD784C3F7B /* Pods-PrivateKit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Dane Brear (TVA2X82B6Q)";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = A35W4MM59Y;
+				DEVELOPMENT_TEAM = TVA2X82B6Q;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/GoogleMaps-3.8.0/Base/Frameworks",
@@ -689,13 +699,15 @@
 				);
 				INFOPLIST_FILE = PrivateKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lc++",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = edu.mit.privatekit;
-				PRODUCT_NAME = PrivateKit;
+				PRODUCT_BUNDLE_IDENTIFIER = "come.risk-indicator.app";
+				PRODUCT_NAME = RiskIndicator;
+				PROVISIONING_PROFILE_SPECIFIER = "Dane's Dist Prov Profile";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -727,7 +739,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Dane Brear (B84S8B4A55)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Dane Brear (B84S8B4A55)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -780,7 +793,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Dane Brear (TVA2X82B6Q)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Dane Brear (TVA2X82B6Q)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

@@ -263,7 +263,7 @@ class LocationTracking extends Component {
                 points={this.state.heatmapPoints}
                 dissipating={false}
                 opacity={1}
-                radius={50}
+                radius={90}
                 gradientSmoothing={10}
                 heatmapMode={'POINTS_DENSITY'}
               />
