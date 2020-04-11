@@ -8,6 +8,10 @@ The app's priority is data anonymity. Any location logs that are taken, if you a
 
 COVID Community Risk Indicator's location logging system and app template is from the open-source project, [Private Kit](https://github.com/tripleblindmarket/covid-safe-paths)
 
+## Video Walkthrough
+
+[COVID Community Risk Indicator Video Walkthrough](https://www.youtube.com/watch?v=ubNMzEFYRUk)
+
 # Development Overview
 
 This is a React Native app version 61.5
