@@ -60,3 +60,6 @@ buck-out/
 
 #Environment file
 /env.js
+
+# Google generated files
+ios/GoogleService-Info.plist
