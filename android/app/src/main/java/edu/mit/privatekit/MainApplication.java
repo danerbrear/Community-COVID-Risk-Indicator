@@ -1,4 +1,4 @@
-package edu.mit.privatekit;
+package com.risk_indicator.app;
 
 import android.app.Application;
 import android.content.Context;
