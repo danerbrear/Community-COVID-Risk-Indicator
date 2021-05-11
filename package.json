@@ -40,7 +40,7 @@
     "@react-navigation/stack": "5.1.1",
     "firebase-tools": "^8.0.1",
     "i18next": "^19.3.3",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "moment": "^2.24.0",
     "patch-package": "^6.2.1",
     "postinstall-postinstall": "^2.0.0",
